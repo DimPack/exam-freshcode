@@ -1,0 +1,7 @@
+.*
+!.gitignore
+!.sequelizerc
+.idea/
+.vscode/
+/node_modules/
+# uploadFiles/
