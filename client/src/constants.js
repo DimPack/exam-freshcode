@@ -19,8 +19,8 @@ export default {
   ACCESS_TOKEN: 'accessToken',
   publicURL:
     env === 'production'
-      ? `http://${serverIP}:80/images/`
-      : `http://${serverIP}:${serverPort}/public/images/`,
+      ? `http://${serverIP}:80/images`
+      : `http://${serverIP}:${serverPort}/public/images`,
   NORMAL_PREVIEW_CHAT_MODE: 'NORMAL_PREVIEW_CHAT_MODE',
   FAVORITE_PREVIEW_CHAT_MODE: 'FAVORITE_PREVIEW_CHAT_MODE',
   BLOCKED_PREVIEW_CHAT_MODE: 'BLOCKED_PREVIEW_CHAT_MODE',
