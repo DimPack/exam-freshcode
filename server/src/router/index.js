@@ -2,8 +2,13 @@ const express = require('express');
 const userRouter = require('./user.router');
 const contestRouter = require('./contest.router');
 const chatRouter = require('./chat.router');
-const { checkToken } = require('../middlewares/checkToken');
+const { checkToken, checkAuth } = require('../middlewares/checkToken');
+const { validateLogin } = require('../middlewares/validators');
+const { login } = require('../controllers/userController');
+
 const router = express.Router();
+router.get('/getUser', checkAuth);
+router.post('/login', validateLogin, login);
 
 router.use(checkToken);
 

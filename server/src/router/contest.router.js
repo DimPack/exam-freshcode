@@ -16,12 +16,9 @@ const {
   onlyForCustomerWhoCreateContest,
 } = require('../middlewares/basicMiddlewares');
 const { updateContestFile, uploadLogoFiles } = require('../utils/fileUpload');
-const { checkAuth } = require('../middlewares/checkAuth');
 
 const router = Router();
 
-router.post('/getUser', checkAuth);
-///^^^^^^
 router.post('/dataForContest', dataForContest);
 router.post('/setNewOffer', uploadLogoFiles, canSendOffer, setNewOffer);
 router.post('/setOfferStatus', onlyForCustomerWhoCreateContest, setOfferStatus);

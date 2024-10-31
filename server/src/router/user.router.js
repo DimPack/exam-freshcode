@@ -23,8 +23,9 @@ const { uploadContestFiles, uploadAvatar } = require('../utils/fileUpload');
 const router = Router();
 
 router.post('/registration', validateRegistrationData, hashPass, registration);
-router.post('/login', validateLogin, login);
+// router.post('/login', validateLogin, login);
 /////^^^^^^
+
 router.post(
   '/pay',
   onlyForCustomer,
@@ -37,5 +38,6 @@ router.post('/changeMark', onlyForCustomer, changeMark);
 router.post('/cashout', onlyForCreative, cashout);
 
 router.put('/updateUser', uploadAvatar, updateUser);
+
 
 module.exports = router;
