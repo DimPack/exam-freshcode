@@ -17,8 +17,7 @@ const router = Router();
 
 router.post('/changeMark', onlyForCustomer, changeMark);
 router.post('/cashout', onlyForCreative, cashout);
-router.post(
-  '/pay',
+router.post('/pay',
   onlyForCustomer,
   uploadContestFiles,
   parseBody,
