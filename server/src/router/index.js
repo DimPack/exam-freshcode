@@ -7,10 +7,10 @@ const { checkToken, checkAuth } = require('../middlewares/checkToken');
 
 const router = express.Router();
 router.use('/', authRouter);
+router.get('/getUser', checkAuth);
 
 router.use(checkToken);
 
-router.get('/getUser', checkAuth);
 router.use('/users', userRouter);
 router.use('/contests', contestRouter);
 router.use('/chats', chatRouter);
