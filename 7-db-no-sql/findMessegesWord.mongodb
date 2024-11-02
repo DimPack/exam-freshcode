@@ -1,0 +1,15 @@
+use('shm-chat');
+
+db.messages.aggregate([
+    {
+        $match: {
+            body: "паравоз"
+        }
+    },
+    {
+        $group: {
+          _id: "$body",
+          count: { $sum: 1 }
+        }
+    }
+]);
