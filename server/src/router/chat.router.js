@@ -21,11 +21,11 @@ router.post('/getChat', getChat);
 router.get('/getPreview', getPreview);
 router.get('/getCatalogs', getCatalogs);
 
-router.put('/blackList', blackList);
+router.patch('/blackList', blackList);
 router.patch('/favorite', favoriteChat);
-router.put('/updateNameCatalog', updateNameCatalog);
-router.put('/addNewChatToCatalog', addNewChatToCatalog);
-router.put('/removeChatFromCatalog', removeChatFromCatalog);
+router.patch('/updateNameCatalog', updateNameCatalog);
+router.patch('/addNewChatToCatalog', addNewChatToCatalog);
+router.patch('/removeChatFromCatalog', removeChatFromCatalog);
 
 router.delete('/deleteCatalog', deleteCatalog);
 

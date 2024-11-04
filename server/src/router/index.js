@@ -6,8 +6,8 @@ const chatRouter = require('./chat.router');
 const { checkToken, checkAuth } = require('../middlewares/checkToken');
 
 const router = express.Router();
-router.use('/', authRouter);
 router.get('/getUser', checkAuth);
+router.use('/', authRouter);
 
 router.use(checkToken);
 
