@@ -33,7 +33,7 @@ class Header extends React.Component {
               src={
                 this.props.data.avatar === 'anon.png'
                   ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.publicURL}${this.props.data.avatar}`
+                  : `${CONSTANTS.publicURL}/${this.props.data.avatar}`
               }
               alt="user"
             />
@@ -117,13 +117,13 @@ class Header extends React.Component {
           </div>
         </div>
         <div className={styles.navContainer}>
-        <a href="/">
-          <img
+          <a href="/">
+            <img
               src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
               className={styles.logo}
               alt="blue_logo"
             />
-        </a>
+          </a>
           <div className={styles.leftNav}>
             <div className={styles.nav}>
               <ul>
@@ -168,8 +168,9 @@ class Header extends React.Component {
                   />
                   <ul>
                     <li>
-                      <a href="http://www.google.com">HOW IT WORKS</a>
+                      <Link to="/how-it-works">HOW IT WORKS</Link>
                     </li>
+
                     <li>
                       <a href="http://www.google.com">PRICING</a>
                     </li>
