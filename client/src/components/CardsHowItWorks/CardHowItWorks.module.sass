@@ -1,0 +1,59 @@
+.containerCard
+    display: flex
+    justify-content: center
+    flex-wrap: wrap
+    gap: 20px
+
+.card
+    max-width: 400px
+    width: 100%
+    flex: 1 1 300px
+    min-height: 250px
+    display: flex
+    flex-direction: column
+    padding: 25px
+    background: #fff
+    box-shadow: 0 16px 32px rgb(0 0 0 / .04)
+    border-radius: 24px
+    
+    .icon
+        margin-bottom: 20px
+.title
+    font-weight: 700
+    margin: 0 0 10px 0
+    font-size: 20px
+    color: #000
+
+
+.description
+    font-size: clamp(0.75rem, 1vw + 0.5rem, 1rem)
+    line-height: 1.5
+    font-weight: 400
+    color: rgba(25, 24, 74, 0.5)
+    margin-bottom: 3rem
+
+.link
+    display: inline-flex
+    align-items: center
+    justify-content: space-between
+    max-width: 220px
+    transition: all ease .3s
+    border-radius: 8px
+    color: #fff
+    background-color: #637CF7
+    border: none
+    padding: 13px 20px
+    margin-top: auto
+
+    .arrow
+        width: 35px
+        height: 25px
+        background-repeat: no-repeat
+        background-position: center center
+        background-image: url('/staticImages/icons/arrowBtn.svg')
+        transition: all ease .3s
+        left: 0
+
+    &:hover .arrow
+        transform: translateX(5px)
+

@@ -25,7 +25,6 @@ const UserInfo = (props) => {
         <UpdateUserInfoForm onSubmit={updateUserData} />
       ) : (
         <div className={styles.infoContainer}>
-          {console.log('publicURL:', CONSTANTS.publicURL)}
           <img
             src={
               avatar && avatar !== 'anon.png'
@@ -35,7 +34,6 @@ const UserInfo = (props) => {
             className={styles.avatar}
             alt="user"
           />
-          {console.log(data)}
 
           <div className={styles.infoContainer}>
             <div className={styles.infoBlock}>
