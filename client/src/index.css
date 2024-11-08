@@ -13,6 +13,7 @@
 a{
   text-decoration: none;
 }
+
 html,
 body,
 div,
@@ -100,6 +101,8 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  scroll-behavior: smooth;
+
 }
 
 /* make sure to set some focus styles for accessibility */

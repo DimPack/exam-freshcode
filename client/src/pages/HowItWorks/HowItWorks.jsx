@@ -4,7 +4,8 @@ import cx from 'classnames';
 import CardsHowItWorks from '../../components/CardsHowItWorks/CardsHowItWorks';
 import constants from '../../constants';
 import StepHowItWorks from '../../components/StepHowItWorks/StepHowItWorks';
-
+import TabsFaq from '../../components/TabsFaqHowItWorks/TabsFaqHowItWorks'
+import Accordion from '../../components/AccordionsHowItWork/AccordionsHowItWork';
 const HowItWorks = () => {
   const titleCentry = cx(styles.titlehowItWorks, styles.centre);
   return (
@@ -59,8 +60,16 @@ const HowItWorks = () => {
             />
             <h2 className={styles.title}>How Do Naming Contests Work?</h2>
           </div>
-            <StepHowItWorks />
+          <StepHowItWorks />
         </div>
+      </section>
+
+      <section className={styles.howItWorks}>
+          <div className={titleCentry}>
+            <h2 className={styles.title}>Frequently Asked Questions</h2>
+        </div>
+        <TabsFaq />
+        <Accordion />
       </section>
     </>
   );
