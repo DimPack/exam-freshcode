@@ -216,10 +216,20 @@ module.exports.setOfferStatus = async (req, res, next) => {
 };
 
 module.exports.getCustomersContests = (req, res, next) => {
+  // Перевіряємо наявність статусу і userId
+  const { status } = req.headers;
+  const { userId } = req.tokenData;
+  const limit = parseInt(req.query.limit, 10) || 8; // Дефолтне значення 8
+  const offset = parseInt(req.query.offset, 10) || 0;
+
+  if (!status || !userId) {
+    return res.status(400).send({ message: 'Missing required parameters' });
+  }
+
   db.Contests.findAll({
-    where: { status: req.headers.status, userId: req.tokenData.userId },
-    limit: req.body.limit,
-    offset: req.body.offset ? req.body.offset : 0,
+    where: { status, userId },
+    limit,
+    offset,
     order: [['id', 'DESC']],
     include: [
       {
@@ -230,16 +240,20 @@ module.exports.getCustomersContests = (req, res, next) => {
     ],
   })
     .then(contests => {
-      contests.forEach(
-        contest => contest.dataValues.count = contest.dataValues.Offers.length);
-      let haveMore = true;
-      if (contests.length === 0) {
-        haveMore = false;
-      }
+      contests.forEach(contest => {
+        contest.dataValues.count = contest.dataValues.Offers
+          ? contest.dataValues.Offers.length
+          : 0;
+      });
+      const haveMore = contests.length > 0;
       res.send({ contests, haveMore });
     })
-    .catch(err => next(new ServerError(err)));
+    .catch(err => {
+      console.error(err); // Додатковий лог для дебагу
+      next(new Error('Failed to get contests')); // Можна замінити на ServerError, якщо це визначено
+    });
 };
+
 
 module.exports.getContests = (req, res, next) => {
   const predicates = UtilFunctions.createWhereForAllContests(req.body.typeIndex,

@@ -20,21 +20,19 @@ module.exports.validateLogin = async (req, res, next) => {
   }
 };
 
-module.exports.validateContestCreation = (req, res, next) => {
-  const promiseArray = [];
-  req.body.contests.forEach(el => {
-    promiseArray.push(schems.contestSchem.isValid(el));
-  });
-  return Promise.all(promiseArray)
-    .then(results => {
-      results.forEach(result => {
-        if (!result) {
-          return next(new BadRequestError());
-        }
-      });
-      next();
-    })
-    .catch(err => {
-      next(err);
-    });
+module.exports.validateContestCreation = async (req, res, next) => {
+  try {
+    const validationPromises = req.body.contests.map((contest) =>
+      schems.contestSchem.validate(contest, { abortEarly: false })
+    );
+
+    await Promise.all(validationPromises);
+    next();
+  } catch (error) {
+    if (error.errors) {
+      const errorMessage = error.errors.join(', ');
+      return next(new BadRequestError(`Validation failed: ${errorMessage}`));
+    }
+    next(error);
+  }
 };
