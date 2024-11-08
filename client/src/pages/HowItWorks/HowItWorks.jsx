@@ -3,8 +3,10 @@ import styles from './HowItWorks.module.sass';
 import cx from 'classnames';
 import CardsHowItWorks from '../../components/CardsHowItWorks/CardsHowItWorks';
 import constants from '../../constants';
+import StepHowItWorks from '../../components/StepHowItWorks/StepHowItWorks';
+
 const HowItWorks = () => {
-  const classNames = cx(styles.titlehowItWorks, styles.centre);
+  const titleCentry = cx(styles.titlehowItWorks, styles.centre);
   return (
     <>
       <section className={styles.howItWorks}>
@@ -34,9 +36,9 @@ const HowItWorks = () => {
         </div>
       </section>
 
-      <section className={styles.howItWorks}>
+      <section className={`${styles.howItWorks} ${styles.colorManaged}`}>
         <div className={styles.howItWorksContainer}>
-          <div className={classNames}>
+          <div className={titleCentry}>
             <h4 className={styles.titleHighlight}>Our Services</h4>
             <h2 className={styles.title}>3 Ways To Use Atom</h2>
             <p className={styles.titleDescription}>
@@ -47,9 +49,9 @@ const HowItWorks = () => {
         </div>
       </section>
 
-      <section className={styles.howItWorks}>
+      <section className={`${styles.howItWorks} ${styles.colorStep}`}>
         <div className={styles.howItWorksContainer}>
-          <div className={classNames}>
+          <div className={titleCentry}>
             <img
               className={styles.icon}
               src={`${constants.STATIC_ICONS_PATH}cup.svg`}
@@ -57,6 +59,7 @@ const HowItWorks = () => {
             />
             <h2 className={styles.title}>How Do Naming Contests Work?</h2>
           </div>
+            <StepHowItWorks />
         </div>
       </section>
     </>
