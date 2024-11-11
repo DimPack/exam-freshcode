@@ -1,12 +1,14 @@
-import React from 'react';
+import { useRef } from 'react';
 import styles from './HowItWorks.module.sass';
 import cx from 'classnames';
 import CardsHowItWorks from '../../components/CardsHowItWorks/CardsHowItWorks';
 import constants from '../../constants';
 import StepHowItWorks from '../../components/StepHowItWorks/StepHowItWorks';
-import TabsFaq from '../../components/TabsFaqHowItWorks/TabsFaqHowItWorks'
+import TabsFaq from '../../components/TabsFaqHowItWorks/TabsFaqHowItWorks';
 import Accordion from '../../components/AccordionsHowItWork/AccordionsHowItWork';
+
 const HowItWorks = () => {
+  const sectionRefs = useRef([]);
   const titleCentry = cx(styles.titlehowItWorks, styles.centre);
   return (
     <>
@@ -30,6 +32,7 @@ const HowItWorks = () => {
                   src="https://iframe.mediadelivery.net/embed/239474/327efcdd-b1a2-4891-b274-974787ae8362?autoplay=false&amp;loop=false&amp;muted=false&amp;preload=true&amp;responsive=true"
                   allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
                   allowFullScreen={true}
+                  title="How Atom Works Video"
                 ></iframe>
               </div>
             </div>
@@ -65,11 +68,11 @@ const HowItWorks = () => {
       </section>
 
       <section className={styles.howItWorks}>
-          <div className={titleCentry}>
-            <h2 className={styles.title}>Frequently Asked Questions</h2>
+        <div className={titleCentry}>
+          <h2 className={styles.title}>Frequently Asked Questions</h2>
         </div>
-        <TabsFaq />
-        <Accordion />
+        <TabsFaq sectionRefs={sectionRefs} />
+        <Accordion sectionRefs={sectionRefs} />
       </section>
     </>
   );
