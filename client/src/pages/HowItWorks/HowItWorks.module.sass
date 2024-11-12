@@ -1,3 +1,5 @@
+@import '../../common/styles/_color.sass'
+
 .howItWorks
     display: flex
     flex-direction: column
@@ -8,7 +10,7 @@
     box-sizing: border-box
 
     .title
-        color: #19184A
+        color: var(--color-main-title)
         max-width: 100%
         font-weight: 700
         margin: 0 auto 10px auto
@@ -16,8 +18,11 @@
         font-size: clamp(1.5rem, 2.5vw + 1rem, 2.5rem)
     h2
         font-size: clamp(1.125rem, 1.5vw + 1rem, 2rem)
-    h4
+    h3
         font-size: clamp(1rem, 1.5vw + 1rem, 1.75rem)
+    h4
+        font-size: clamp(0.625rem, 1vw + 0.625rem, 1rem)
+
 
 
 
@@ -32,10 +37,10 @@
         text-align: center
 
 .titleHighlight
-    color: #377dff
+    color: var(--color-high-light)
     font-weight: 400
     padding: 0.4375rem 0.9375rem
-    background: rgba(55, 125, 255, 0.1)
+    background: var(--color-bg-high-light)
     border-color: transparent
     display: inline-block
     line-height: 21px

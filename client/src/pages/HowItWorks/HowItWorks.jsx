@@ -6,6 +6,7 @@ import constants from '../../constants';
 import StepHowItWorks from '../../components/StepHowItWorks/StepHowItWorks';
 import TabsFaq from '../../components/TabsFaqHowItWorks/TabsFaqHowItWorks';
 import Accordion from '../../components/AccordionsHowItWork/AccordionsHowItWork';
+import SearchFormHowItWork from '../../components/SearchFormHowItWork/SearchFormHowItWork';
 
 const HowItWorks = () => {
   const sectionRefs = useRef([]);
@@ -16,9 +17,9 @@ const HowItWorks = () => {
         <div className={styles.howItWorksContainer}>
           <div className={styles.flexBlock}>
             <div className={styles.titlehowItWorks}>
-              <h4 className={styles.titleHighlight}>
+              <h5 className={styles.titleHighlight}>
                 World's #1 Naming Platform
-              </h4>
+              </h5>
               <h1 className={styles.title}>How Does Atom Work?</h1>
               <p className={styles.titleDescription}>
                 Atom helps you come up with a great name for your business by
@@ -43,7 +44,7 @@ const HowItWorks = () => {
       <section className={`${styles.howItWorks} ${styles.colorManaged}`}>
         <div className={styles.howItWorksContainer}>
           <div className={titleCentry}>
-            <h4 className={styles.titleHighlight}>Our Services</h4>
+            <h5 className={styles.titleHighlight}>Our Services</h5>
             <h2 className={styles.title}>3 Ways To Use Atom</h2>
             <p className={styles.titleDescription}>
               Atom offers 3 ways to get you a perfect name for your business.
@@ -73,6 +74,10 @@ const HowItWorks = () => {
         </div>
         <TabsFaq sectionRefs={sectionRefs} />
         <Accordion sectionRefs={sectionRefs} />
+      </section>
+
+      <section className={styles.howItWorks}>
+        <SearchFormHowItWork />
       </section>
     </>
   );

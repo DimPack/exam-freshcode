@@ -23,7 +23,7 @@ const AccordionsHowItWork = ({ sectionRefs }) => {
           key={sectionIndex}
           ref={(el) => (sectionRefs.current[sectionIndex] = el)}
         >
-          <h4 className={styles.title}>{faqSection.title}</h4>
+          <h3 className={styles.title}>{faqSection.title}</h3>
           {faqSection.content.map((faqItem, itemIndex) => (
             <div
               key={itemIndex}
@@ -35,7 +35,7 @@ const AccordionsHowItWork = ({ sectionRefs }) => {
               onClick={() => toggleItem(sectionIndex, itemIndex)}
             >
               <p className={styles.question}>
-                {faqItem.question} <div className={styles.close}></div>
+                {faqItem.question} <span className={styles.close}></span>
               </p>
               {openItems[sectionIndex]?.[itemIndex] && (
                 <p
