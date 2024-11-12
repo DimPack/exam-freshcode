@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import styles from './HowItWorks.module.sass';
 import cx from 'classnames';
-import CardsHowItWorks from '../../components/CardsHowItWorks/CardsHowItWorks';
 import constants from '../../constants';
+import CardsHowItWorks from '../../components/CardsHowItWorks/CardsHowItWorks';
 import StepHowItWorks from '../../components/StepHowItWorks/StepHowItWorks';
 import TabsFaq from '../../components/TabsFaqHowItWorks/TabsFaqHowItWorks';
 import Accordion from '../../components/AccordionsHowItWork/AccordionsHowItWork';
@@ -10,6 +10,7 @@ import SearchFormHowItWork from '../../components/SearchFormHowItWork/SearchForm
 
 const HowItWorks = () => {
   const sectionRefs = useRef([]);
+  
   const titleCentry = cx(styles.titlehowItWorks, styles.centre);
   return (
     <>
