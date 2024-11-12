@@ -1,0 +1,46 @@
+.container
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    gap: 25px
+    font-family: "Product Sans", sans-serif
+    color: #828282
+    margin-top: 35px
+
+    
+.stepBlock
+    display: flex
+    flex-direction: column
+    justify-content: start
+    width: 230px
+    padding: 35px
+    box-shadow: 0 16px 32px rgb(0 0 0 / .05)
+    background-color: #fff
+    border-radius: 24px
+    line-height: 1.5
+    position: relative
+    &::before
+        content: ""
+        width: 30px
+        height: 14px
+        display: block
+        position: absolute
+        background-repeat: no-repeat
+        top: 50%
+        left: 95%
+        z-index: 99
+        background-image: url('/staticImages/icons/arrow-right.svg')
+    &:last-child::before
+        display: none
+.name
+    display: inline-block
+    font-size: 14px
+    color: #fff
+    font-weight: 700
+    width: 80px
+    height: 32px
+    margin-bottom: 20px
+    background: #4942F3
+    border-radius: 20px
+    line-height: 32px
+    padding: 0 15px 

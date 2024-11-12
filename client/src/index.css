@@ -3,6 +3,17 @@
    License: none (public domain)
 */
 
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+a{
+  text-decoration: none;
+}
+
 html,
 body,
 div,
@@ -90,6 +101,8 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  scroll-behavior: smooth;
+
 }
 
 /* make sure to set some focus styles for accessibility */
