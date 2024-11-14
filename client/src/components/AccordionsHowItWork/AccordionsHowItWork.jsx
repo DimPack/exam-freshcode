@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './AccordionsHowItWork.module.sass';
 import dataFaq from './dataFaq';
 

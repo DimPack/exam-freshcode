@@ -1,0 +1,43 @@
+.buttonBlock
+    max-width: 300px
+    width: 100%
+    border: 2px solid #c7cace
+    border-radius: 12px
+    padding: 30px
+    cursor: pointer
+    position: relative
+
+    & span
+        font-weight: 700
+
+    & p
+        margin-top: 20px
+
+.buttonBlock:hover
+    border: 2px solid #6ca3f8
+
+
+.active
+    border: 2px solid #6ca3f8
+
+.active::after
+    content: '\2714'
+    position: absolute
+    font-size: 25px
+    color: #6ca3f8
+    top: 10px
+    right: 10px
+
+[data-recommended='true']::before
+    content: 'recommended'
+    position: absolute
+    top: -12px
+    right: 50%
+    transform: translateX(50%)
+    color: #6ca3f8
+    background-color: #e0e6ee
+    padding: 5px
+    border-radius: 5px
+    font-size: 12px
+    font-weight: 700
+    text-transform: capitalize
