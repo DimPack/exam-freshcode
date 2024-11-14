@@ -22,15 +22,18 @@
     color: var(--color-main-title)
     padding: 24px
     cursor: pointer
-    transition: all ease .5s
     border-radius: 16px
     border: 1px solid #d0d0d0
+    // transition: max-height 2s ease, padding 2s ease
+    transition: all ease .5s
 
+    max-height: 100px
     &:not(.active):hover
         background-color: rgba(48, 125, 246, .1)
         border-color: var(--color-high-light)
 
     &.active
+        max-height: 300px
         .close
             &::before, 
             &::after
