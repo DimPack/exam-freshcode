@@ -1,0 +1,1 @@
+SELECT * FROM "Contests" WHERE id = 3;
