@@ -17,19 +17,23 @@ class ContestsContainer extends React.Component {
       document.documentElement.offsetHeight
     ) {
       if (this.props.haveMore) {
-        this.props.loadMore(this.props.children.length);
+        const childrenCount = React.Children.toArray(this.props.children).length;
+        this.props.loadMore(childrenCount);
       }
     }
   };
 
   render () {
     const { isFetching } = this.props;
-    if (!isFetching && this.props.children.length === 0) {
-      return <div className={styles.notFound}>Nothing not found</div>;
+    const childrenArray = React.Children.toArray(this.props.children);
+
+    if (!isFetching && childrenArray.length === 0) {
+      return <div className={styles.notFound}>Nothing found</div>;
     }
+
     return (
       <div>
-        {this.props.children}
+        {childrenArray}
         {isFetching && (
           <div className={styles.spinnerContainer}>
             <Spinner />

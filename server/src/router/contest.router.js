@@ -22,10 +22,10 @@ const router = Router();
 router.post('/dataForContest', dataForContest);
 router.post('/setNewOffer', uploadLogoFiles, canSendOffer, setNewOffer);
 router.post('/setOfferStatus', onlyForCustomerWhoCreateContest, setOfferStatus);
+router.post('/getAllContests', onlyForCreative, getContests);
 
 router.get('/getCustomersContests', getCustomersContests);
 router.get('/getContestById', canGetContest, getContestById);
-router.get('/getAllContests', onlyForCreative, getContests);
 router.get('/downloadFile/:fileName', downloadFile);
 
 router.put('/updateContest', updateContestFile, updateContest);

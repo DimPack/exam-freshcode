@@ -28,7 +28,7 @@ export const getActiveContests = ({
   industry,
   awardSort,
   ownEntries,
-}) => http.get('/contests/getAllContests', {
+}) => http.post('/contests/getAllContests', {
     offset,
     limit,
     typeIndex,
