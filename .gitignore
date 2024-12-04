@@ -1,5 +1,7 @@
 .idea/
 .vscode/
+error.log
+/Log/
 
 ./client/node_modules/
 ./server/node_modules/

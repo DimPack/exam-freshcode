@@ -21,6 +21,7 @@ import Layout from './pages/Layout/Layout';
 import OnlyNotAuthorizedUserRoute from './components/Routes/OnlyNotAuthorizedUserRoute/OnlyNotAuthorizedUserRoute';
 import PrivateRoute from './components/Routes/PrivateRoute/PrivateRoute';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
+import ToDoEvents from './pages/ToDoEvents/ToDoEvents';
 
 class App extends Component {
   render() {
@@ -41,6 +42,7 @@ class App extends Component {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
+            <Route path="/todo-events" element={<ToDoEvents />} />
             
             <Route element={<OnlyNotAuthorizedUserRoute />}>
               <Route path="/login" element={<LoginPage />} />

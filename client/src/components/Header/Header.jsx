@@ -23,7 +23,9 @@ class Header extends React.Component {
   startContests = () => {
     this.props.navigate('/startContest');
   };
-
+  toDoButtonHandler = () => {
+    this.props.navigate('/todo-events');
+  };
   renderLoginButtons = () => {
     if (this.props.data) {
       return (
@@ -265,11 +267,19 @@ class Header extends React.Component {
               </ul>
             </div>
             {this.props.data && this.props.data.role !== CONSTANTS.CREATOR && (
-              <div
-                className={styles.startContestBtn}
-                onClick={this.startContests}
-              >
-                START CONTEST
+              <div className={styles.buttonContainer}>
+                <div
+                  className={styles.startContestBtn}
+                  onClick={this.startContests}
+                >
+                  START CONTEST
+                </div>
+                <div
+                  className={styles.toDoButton}
+                  onClick={this.toDoButtonHandler}
+                >
+                  Events List
+                </div>
               </div>
             )}
           </div>

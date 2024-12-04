@@ -4,4 +4,6 @@
 .idea/
 .vscode/
 /node_modules/
+error.log
+/Log/
 # uploadFiles/
