@@ -1,0 +1,93 @@
+.form 
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-wrap: wrap
+    gap: 10px
+    position: relative
+    // border: 1px solid #ddd
+    // border-radius: 10px
+    // margin: 20px
+    // padding: 20px
+
+    & .inputMain 
+        flex: 1
+        background-color: #f9f9f9
+        border: 2px solid #ddd
+        border-radius: 10px
+        padding: 20px
+    
+    & input:hover 
+        border: 2px solid #2196f3
+        cursor: pointer
+    
+    & .inputData
+        max-width: 180px
+        width: 100%
+        font-size: 16px
+        padding: 20px
+        border: 2px solid #ddd
+        border-radius: 10px
+        background: #f9f9f9
+        transition: all 0.3s ease
+        cursor: pointer
+
+.dateAndTimeContainer
+    display: flex
+    flex-direction: row
+    align-items: center
+    gap: 10px
+    position: relative
+
+    @media (max-width: 549px)
+        width: 100%
+        flex-wrap: wrap
+        justify-content: center
+
+@media (max-width: 750px) 
+    .form
+        flex-direction: column
+        justify-content: start
+
+        & input
+            max-width: 600px
+            width: 100%
+
+.addButton 
+    background-color: #2196f3
+    width: 100px
+    padding: 32px
+    border-radius: 10px
+    border: none
+    position: relative
+
+    &:after
+        content: '\271A'
+        color: white
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+    
+    &:hover
+        background-color: #22b93b
+    
+    &:hover:after
+        content: '\2714'
+
+.error
+    color: red
+    text-align: center
+    width: 100%
+
+
+
+
+
+
+
+
+
+
+
+  

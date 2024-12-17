@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 function Timer({ dateTime }) {
   const [timeLeft, setTimeLeft] = useState("");
+  const [createdDate] = useState(new Date().toLocaleString()); // Зберігаємо поточну дату при створенні компонента
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -10,25 +11,29 @@ function Timer({ dateTime }) {
       const difference = targetDate - now;
 
       if (difference <= 0) {
-        setTimeLeft("Час настав!");
+        setTimeLeft("The time has come!");
         clearInterval(interval);
-        alert(`Подія "${dateTime}" розпочалася!`);
       } else {
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((difference / (1000 * 60)) % 60);
         const seconds = Math.floor((difference / 1000) % 60);
-        setTimeLeft(`${days}д ${hours}г ${minutes}хв ${seconds}с`);
+        setTimeLeft(`${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`);
       }
     };
 
-    calculateTimeLeft(); // Розрахунок одразу після рендера
+    calculateTimeLeft();
     const interval = setInterval(calculateTimeLeft, 1000);
 
-    return () => clearInterval(interval); // Очищення таймера при демонтажі компонента
+    return () => clearInterval(interval);
   }, [dateTime]);
 
-  return <p>Час до події: {timeLeft}</p>;
+  return (
+    <div>
+      <p>Time before the event: {timeLeft}</p>
+      <p>Event created on: {createdDate}</p> {/* Відображаємо дату створення */}
+    </div>
+  );
 }
 
 export default Timer;

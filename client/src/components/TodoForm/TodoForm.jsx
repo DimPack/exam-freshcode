@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import styles from "./TodoForm.module.scss";
+import React, { useState } from 'react';
+import styles from './TodoForm.module.sass';
 
 function TodoForm({ onAddEvent }) {
   const [formData, setFormData] = useState({
-    title: "",
-    date: "",
-    time: "",
+    title: '',
+    date: '',
+    time: '',
   });
-  const [error, setError] = useState(""); // Для збереження тексту помилки
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,67 +15,62 @@ function TodoForm({ onAddEvent }) {
       ...formData,
       [name]: value,
     });
-    if (name === "date" || name === "time") setError(""); // Очищуємо помилку при зміні дати чи часу
+    if (name === 'date' || name === 'time') setError('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Створюємо об'єднаний об'єкт Date із дати та часу
     const eventDateTime = new Date(`${formData.date}T${formData.time}`);
     if (eventDateTime <= new Date()) {
-      setError("Дата та час мають бути в майбутньому!");
+      setError('The date and time are to be announced in the future!');
       return;
     }
 
-    // Передаємо дані на батьківський компонент
     onAddEvent({
       title: formData.title,
       dateTime: eventDateTime.toISOString(),
     });
 
-    // Скидаємо форму
-    setFormData({ title: "", date: "", time: "" });
-    setError("");
+    setFormData({ title: '', date: '', time: '' });
+    setError('');
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.inputContainer}>
+      <input
+        className={styles.inputMain}
+        type="text"
+        name="title"
+        placeholder="add Event"
+        value={formData.title}
+        onChange={handleChange}
+        maxLength={100}
+        required
+      />
+      <div className={styles.dateAndTimeContainer}>
         <input
-          type="text"
-          name="title"
-          placeholder="Додайте подію"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
-        <button className={styles.addButton} type="submit"></button>
-      </div>
-
-
-      <div>
-        <label>Дата:</label>
-        <input
+          className={styles.inputData}
           type="date"
           name="date"
           value={formData.date}
           onChange={handleChange}
           required
         />
-      </div>
-      <div>
-        <label>Час:</label>
+        
         <input
+          className={styles.inputData}
           type="time"
           name="time"
           value={formData.time}
           onChange={handleChange}
           required
         />
+        <button className={styles.addButton} type="submit"></button>
+
       </div>
-      {/* Відображення тексту помилки */}
-      {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
+
+    {error && <p className={styles.error}>{error}</p>}
     </form>
   );
 }
