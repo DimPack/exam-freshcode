@@ -1,0 +1,72 @@
+.timer
+    display: flex
+    justify-content: center
+    align-items: flex-end
+    gap: 15px
+.date
+    position: relative
+    text-align: center
+    & span
+        display: inline-flex
+        align-items: center
+        justify-content: center
+        width: 50px
+        height: 50px
+        border-radius: 50%
+        background-color: #2196f3
+        color: #fff
+        font-weight: bold
+    & p 
+        margin-top: 10px
+        font-size: 14px
+        font-weight: bold
+        font-style: italic
+
+    &:not(:last-child)::after
+        content: ":"
+        position: absolute
+        top: 50%
+        right: -10px
+        transform: translateY(-100%)
+
+.time
+    display: flex
+    justify-content: center
+    gap: 15px
+    font-size: 20px
+
+.dateEvent
+    display: flex
+    justify-content: center
+    flex-direction: column
+    gap: 15px
+
+.createdDate,
+.endDate
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 200px
+    gap: 15px
+    position: relative
+    padding: 10px
+    background-color: #fff
+    border: 1px solid #d0d0d0
+    border-radius: 4px
+
+    &::after, 
+    &::before
+        position: absolute
+        background-color: #fff
+        font-size: 14px
+        font-style: italic
+        font-weight: bold
+    
+.createdDate::after
+        content: "Date of creation"
+        top: -8px
+
+.endDate::before
+        content: "Event date"
+        top: -8px
+

@@ -11,25 +11,38 @@ function TodoForm({ onAddEvent }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+
+    if (name === 'date' && value) {
+      const [year, month, day] = value.split('-');
+      const europeanDate = `${day}.${month}.${year}`;
+      setFormData({
+        ...formData,
+        [name]: europeanDate,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+
     if (name === 'date' || name === 'time') setError('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const eventDateTime = new Date(`${formData.date}T${formData.time}`);
-    if (eventDateTime <= new Date()) {
+    const [day, month, year] = formData.date.split('.');
+    const formattedDate = new Date(`${year}-${month}-${day}T${formData.time}`);
+
+    if (formattedDate <= new Date()) {
       setError('The date and time are to be announced in the future!');
       return;
     }
 
     onAddEvent({
       title: formData.title,
-      dateTime: eventDateTime.toISOString(),
+      dateTime: formattedDate.toISOString(),
     });
 
     setFormData({ title: '', date: '', time: '' });
@@ -53,7 +66,7 @@ function TodoForm({ onAddEvent }) {
           className={styles.inputData}
           type="date"
           name="date"
-          value={formData.date}
+          value={formData.date.split('.').reverse().join('-') || ''}
           onChange={handleChange}
           required
         />
@@ -67,10 +80,9 @@ function TodoForm({ onAddEvent }) {
           required
         />
         <button className={styles.addButton} type="submit"></button>
-
       </div>
 
-    {error && <p className={styles.error}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
     </form>
   );
 }
