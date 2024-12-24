@@ -7,8 +7,35 @@
 .todoItem
     display: flex
     justify-content: space-between
+    flex-wrap: wrap
+    gap: 20px
+    position: relative
     background-color: #f9f9f9
     border: 1px solid #d0d0d0
     border-radius: 10px
     margin-bottom: 30px
     padding: 30px
+
+.close
+    background-image: url("../../staticImages/icons/close.svg")
+    position: absolute
+    width: 24px 
+    height: 24px
+    right: 0
+    top: 0
+    cursor: pointer
+
+.todoTitle
+  text-align: start
+  overflow-wrap: break-word
+  white-space: normal
+  width: 45%
+
+@media (max-width: 1025px)
+    .todoItem
+        justify-content: center
+
+    .todoTitle
+        width: 100%
+        text-align: center
+

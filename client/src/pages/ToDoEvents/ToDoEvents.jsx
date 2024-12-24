@@ -11,14 +11,10 @@ const ToDoEvents = () => {
   };
 
   return (
-    <>
-      <h1>Events</h1>
-      <div className={styles.mainTodo}>
-        <TodoForm onAddEvent={addEvent} />
-        <TodoList events={events} />
-      </div>
-
-    </>
+    <div className={styles.mainTodo}>
+      <TodoForm onAddEvent={addEvent} />
+      <TodoList events={events} />
+    </div>
   );
 };
 
