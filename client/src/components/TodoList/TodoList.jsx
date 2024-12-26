@@ -3,53 +3,43 @@ import TimerToDo from '../TimerToDo/TimerToDo';
 import styles from './TodoList.module.sass';
 import MessageDelete from './MessageDelete/MessageDelete';
 
-function TodoList({ events }) {
+function TodoList({
+  events,
+  openModal,
+  closeModal,
+  handleConfirmDelete,
+  isModalOpen,
+}) {
+  const [expiredTimers, setExpiredTimers] = useState({});
 
-  const [todos, setTodos] = useState(events);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState(null);
-
-  useEffect(() => {
-    setTodos(events);
-  }, [events]);
-
-  const sortedEvents = useMemo(
-    () => [...todos].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)),
-    [todos]
-  );
-
-  const openModal = (index) => {
-    setDeleteIndex(index);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setDeleteIndex(null);
-  };
-
-  const handleConfirmDelete = () => {
-    setTodos((prevTodos) => prevTodos.filter((_, i) => i !== deleteIndex));
-    closeModal();
+  const handleTimerExpiration = (index) => {
+    setExpiredTimers((prev) => ({ ...prev, [index]: true }));
   };
 
   return (
     <div className={styles.todoList}>
-      {sortedEvents.length === 0 ? (
+      {events.length === 0 ? (
         <p className={styles.emptyMessage}>List is empty</p>
       ) : (
         <ul>
-          {sortedEvents.map((event, index) => (
-            <li key={index} className={styles.todoItem}>
+          {events.map((event, index) => (
+            <li key={index} className={`${styles.todoItem} ${expiredTimers[index] ? styles.todoItemFinish : ''}`}>
+              <p>{index + 1}.</p>
               <h3 className={styles.todoTitle}>{event.title}</h3>
-              <TimerToDo dateTime={event.dateTime} />
-              <div className={styles.close} onClick={() => openModal(index)}></div>
+              <TimerToDo
+                dateTime={event.dateTime}
+                onExpire={() => handleTimerExpiration(index)}
+              />
+              <div
+                className={styles.close}
+                onClick={() => openModal(index)}
+              ></div>
             </li>
           ))}
         </ul>
       )}
 
-      <MessageDelete 
+      <MessageDelete
         isOpen={isModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={closeModal}
