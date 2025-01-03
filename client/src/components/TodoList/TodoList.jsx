@@ -9,12 +9,22 @@ function TodoList({
   closeModal,
   handleConfirmDelete,
   isModalOpen,
+  updateEventStatus,
 }) {
   const [expiredTimers, setExpiredTimers] = useState({});
 
   const handleTimerExpiration = (index) => {
     setExpiredTimers((prev) => ({ ...prev, [index]: true }));
+    updateEventStatus(index);
   };
+
+  useEffect(() => {
+    events.forEach((event, index) => {
+      if (new Date(event.dateTime) <= new Date() && !event.expired) {
+        handleTimerExpiration(index);
+      }
+    });
+  }, [events, updateEventStatus]);
 
   return (
     <div className={styles.todoList}>
@@ -23,7 +33,14 @@ function TodoList({
       ) : (
         <ul>
           {events.map((event, index) => (
-            <li key={index} className={`${styles.todoItem} ${expiredTimers[index] ? styles.todoItemFinish : ''}`}>
+            <li
+              key={index}
+              className={`${styles.todoItem} ${
+                event.expired || expiredTimers[index]
+                  ? styles.todoItemFinish
+                  : ''
+              }`}
+            >
               <p>{index + 1}.</p>
               <h3 className={styles.todoTitle}>{event.title}</h3>
               <TimerToDo

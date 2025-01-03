@@ -28,12 +28,10 @@ function Timer({ dateTime, onExpire }) {
       const targetDate = new Date(dateTime);
       const difference = targetDate - now;
 
-      if (difference <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        if (!hasExpired) {
-          setHasExpired(true);
-          onExpire();
-        }
+      if (difference <= 0 && !hasExpired) {
+        setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' });
+        setHasExpired(true);
+        onExpire();
         return;
       }
 
@@ -41,14 +39,25 @@ function Timer({ dateTime, onExpire }) {
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((difference / (1000 * 60)) % 60);
       const seconds = Math.floor((difference / 1000) % 60);
-      setTimeLeft({ days, hours, minutes, seconds });
+
+      setTimeLeft({
+        days: days < 10 ? `0${days}` : days,
+        hours: hours < 10 ? `0${hours}` : hours,
+        minutes: minutes < 10 ? `0${minutes}` : minutes,
+        seconds: seconds < 10 ? `0${seconds}` : seconds,
+      });
     };
 
-    calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000);
+    if (!hasExpired) {
+      // Викликаємо функцію на початку
+      calculateTimeLeft();
 
-    return () => clearInterval(interval);
-  }, [dateTime, onExpire]);
+      // Оновлюємо кожну секунду
+      const interval = setInterval(calculateTimeLeft, 1000);
+
+      return () => clearInterval(interval);  // Очищаємо інтервал при виході з компонента
+    }
+  }, [dateTime, hasExpired, onExpire]);
 
   return (
     <div className={styles.timer}>

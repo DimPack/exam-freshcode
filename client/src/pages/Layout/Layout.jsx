@@ -6,16 +6,17 @@ import RegistrationFooter from '../../components/Layout/RegistrationFooter';
 import AuthHeader from '../../components/Layout/AuthHeader';
 import styles from './Layout.module.sass';
 
-const Layout = (props) => {
+const Layout = ({completedEventsCount}) => {
   const { pathname } = useLocation();
 
   const isRegisterPathname = pathname === '/registration';
   const isAuthPathname = pathname === '/login' || isRegisterPathname;
 
+  
   return (
     <div className={styles.container}>
       {isAuthPathname && <AuthHeader />}
-      {!isAuthPathname && <Header />}
+      {!isAuthPathname && <Header completedEventsCount={completedEventsCount}/>}
       <div className={styles.content}>
         <Outlet />
       </div>
