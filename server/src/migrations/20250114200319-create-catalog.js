@@ -12,7 +12,13 @@ module.exports = {
       userId: {
         field: 'user_id',
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Users',
+          },
+          key: 'id'
+        }
       },
       catalogName: {
         field: 'catalog_name',

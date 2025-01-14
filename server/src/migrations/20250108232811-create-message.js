@@ -12,7 +12,13 @@ module.exports = {
       senderId: {
         field: 'sender_id',
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Users',
+          },
+          key: 'id'
+        }
       },
       body: {
         allowNull: false,
@@ -21,7 +27,13 @@ module.exports = {
       conversationId: {
         field: 'conversation_id',
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'conversations',
+          },
+          key: 'id'
+        }
       },
       createdAt: {
         field: 'created_at',
@@ -41,6 +53,3 @@ module.exports = {
     await queryInterface.dropTable('messages');
   }
 };
-
-
-//https://www.youtube.com/watch?v=kJU2VQ5dojc&list=PLxQIdU5bMkOiUg3p6X4BXVpIfWzMaLV7l&index=232

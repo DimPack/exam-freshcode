@@ -11,11 +11,13 @@ module.exports = {
       },
       favoriteList: {
         field: 'favorite_list',
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       blackList: {
         field: 'black_list',
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       participants: {
         allowNull: false,
