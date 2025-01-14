@@ -1,17 +1,20 @@
 CREATE TABLE "Conversations" (
   "id" SERIAL PRIMARY KEY,
-  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "favoriteList" BOOLEAN[],
   "blackList" BOOLEAN[],
-  "participants" INT[]
+  "participants" INT[],
+  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "Messages" (
   "id" SERIAL PRIMARY KEY,
   "sender" INT REFERENCES "Users"("id"),
-  "body" TEXT NOT NULL,
+  "body" TEXT(500) NOT NULL,
   "conversation" INT REFERENCES "Conversations"("id"),
-  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
 
 CREATE TABLE "Catalog" (

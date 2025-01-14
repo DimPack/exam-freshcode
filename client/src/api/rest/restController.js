@@ -14,12 +14,12 @@ export const updateUser = (data) => http.put('/users/updateUser', data);
 export const newMessage = (data) => http.post('/chats/newMessage', data);
 export const changeChatFavorite = (data) => http.patch('/chats/favorite', data);
 export const changeChatBlock = (data) => http.patch('/chats/blackList', data);
-export const getCatalogList = (data) => http.get('getCatalogs', data);
-export const addChatToCatalog = (data) => http.patch('addNewChatToCatalog', data);
+export const getCatalogList = (data) => http.get('/chats/getCatalogs', data);
+export const addChatToCatalog = (data) => http.patch('/chats/addNewChatToCatalog', data);
 export const createCatalog = (data) => http.post('/chats/createCatalog', data);
-export const deleteCatalog = (data) => http.delete('deleteCatalog', data);
-export const removeChatFromCatalog = (data) => http.patch('removeChatFromCatalog', data);
-export const changeCatalogName = (data) => http.patch('updateNameCatalog', data);
+export const deleteCatalog = (data) => http.patch('/chats/deleteCatalog', data);
+export const removeChatFromCatalog = (data) => http.patch('/chats/removeChatFromCatalog', data);
+export const changeCatalogName = (data) => http.patch('/chats/updateNameCatalog', data);
 export const getActiveContests = ({
   offset,
   limit,

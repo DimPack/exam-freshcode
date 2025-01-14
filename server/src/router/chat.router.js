@@ -27,6 +27,6 @@ router.patch('/updateNameCatalog', updateNameCatalog);
 router.patch('/addNewChatToCatalog', addNewChatToCatalog);
 router.patch('/removeChatFromCatalog', removeChatFromCatalog);
 
-router.delete('/deleteCatalog', deleteCatalog);
+router.patch('/deleteCatalog', deleteCatalog);
 
 module.exports = router;
