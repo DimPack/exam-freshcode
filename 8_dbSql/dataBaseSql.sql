@@ -1,25 +1,26 @@
 CREATE TABLE "Conversations" (
   "id" SERIAL PRIMARY KEY,
-  "favoriteList" BOOLEAN[],
-  "blackList" BOOLEAN[],
-  "participants" INT[],
-  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  "favorite_list" BOOLEAN[] DEFAULT ARRAY[FALSE],
+  "black_list" BOOLEAN[] DEFAULT ARRAY[FALSE],
+  "participants" INT[] NOT NULL,
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "Messages" (
   "id" SERIAL PRIMARY KEY,
-  "sender" INT REFERENCES "Users"("id"),
-  "body" TEXT(500) NOT NULL,
-  "conversation" INT REFERENCES "Conversations"("id"),
-  "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
+  "sender_id" INT REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "body" TEXT NOT NULL,
+  "conversation_id" INT REFERENCES "Conversations"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE "Catalog" (
+CREATE TABLE "Catalogs" (
   "id" SERIAL PRIMARY KEY,
-  "userId" INT REFERENCES "Users"("id"),
-  "catalogName" VARCHAR(255) NOT NULL,
-  "chats" INT[]
+  "user_id" INT REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "catalog_name" VARCHAR(255) UNIQUE NOT NULL,
+  "chats" INT[] NOT NULL,
+  "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
