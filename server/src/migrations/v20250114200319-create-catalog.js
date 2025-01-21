@@ -2,15 +2,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('messages', {
+    await queryInterface.createTable('catalogs', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      senderId: {
-        field: 'sender_id',
+      userId: {
+        field: 'user_id',
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -18,22 +18,19 @@ module.exports = {
             tableName: 'Users',
           },
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE', 
+        onUpdate: 'CASCADE'
       },
-      body: {
+      catalogName: {
+        field: 'catalog_name',
         allowNull: false,
-        type: Sequelize.TEXT
+        unique: true,
+        type: Sequelize.STRING(255)
       },
-      conversationId: {
-        field: 'conversation_id',
+      chats: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: {
-            tableName: 'conversations',
-          },
-          key: 'id'
-        }
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
       },
       createdAt: {
         field: 'created_at',
@@ -50,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('messages');
+    await queryInterface.dropTable('catalogs');
   }
 };

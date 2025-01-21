@@ -2,33 +2,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('catalogs', {
+    await queryInterface.createTable('conversations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
-        field: 'user_id',
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: {
-            tableName: 'Users',
-          },
-          key: 'id'
-        }
+      favoriteList: {
+        field: 'favorite_list',
+        type: Sequelize.ARRAY(Sequelize.BOOLEAN),
+        defaultValue: [false]
       },
-      catalogName: {
-        field: 'catalog_name',
-        allowNull: false,
-        unique: true,
-        type: Sequelize.STRING(255)
+      blackList: {
+        field: 'black_list',
+        type: Sequelize.ARRAY(Sequelize.BOOLEAN),
+        defaultValue: [false]
       },
-      chats: {
+      participants: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
       },
       createdAt: {
         field: 'created_at',
@@ -45,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('catalogs');
+    await queryInterface.dropTable('conversations');
   }
 };

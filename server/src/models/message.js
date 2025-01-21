@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-      Message.belongsTo(models.conversation, {
+
+      Message.belongsTo(models.Conversation, {
         foreignKey: 'conversationId',
         targetKey: 'id',
         onDelete: 'CASCADE',
@@ -17,25 +18,36 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
+
   Message.init(
     {
       senderId: {
         field: 'sender_id',
         allowNull: false,
         type: DataTypes.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       body: {
         allowNull: false,
         type: DataTypes.TEXT,
         validate: {
           notEmpty: true,
-          notNull: true,
+          notNull: {
+            msg: 'Message body cannot be null',
+          },
         },
       },
       conversationId: {
         field: 'conversation_id',
         allowNull: false,
         type: DataTypes.INTEGER,
+        references: {
+          model: 'Conversations',
+          key: 'id',
+        },
       },
       createdAt: {
         field: 'created_at',
@@ -52,8 +64,9 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'Message',
       tableName: 'messages',
-      underscored: true,
+      underscored: true, // Використання snake_case для назв колонок
     }
   );
+
   return Message;
 };
