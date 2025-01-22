@@ -209,9 +209,7 @@ module.exports.getUser = async (req, res, next) => {
  try {
   if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized. Please log in.' });
-  }
-  console.log(req.user);
-  
+  }  
   res.status(200).json({
     message: 'User information retrieved successfully.',
     user: req.user,

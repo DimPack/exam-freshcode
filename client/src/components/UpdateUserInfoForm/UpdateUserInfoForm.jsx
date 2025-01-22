@@ -87,9 +87,9 @@ const mapStateToProps = state => {
   return {
     error,
     initialValues: {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      displayName: data.displayName,
+      firstName: data.firstName || '',
+      lastName: data.lastName || '',
+      displayName: data.displayName || '',
     },
   };
 };
