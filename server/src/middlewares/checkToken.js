@@ -4,15 +4,29 @@ const TokenError = require('../errors/TokenError');
 const userQueries = require('../controllers/queries/userQueries');
 
 module.exports.checkAuth = async (req, res, next) => {
-  const accessToken = req.headers.authorization;
-
-  if (!accessToken) {
-    return next(new TokenError('need token 222'));
+  const authorizationHeader = req.headers.authorization;
+  console.log('Authorization header:', authorizationHeader);
+  if (!authorizationHeader) {
+    req.user = null;
+    return next();
   }
+
   try {
-    const tokenData = jwt.verify(accessToken, CONSTANTS.JWT_SECRET);
+    const token = authorizationHeader
+    console.log('Token extracted:', token);
+    if (!token) {
+      return next(new TokenError('Token is missing or malformed.'));
+    }
+
+    const tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
+    console.log('Token data:', tokenData);
+
     const foundUser = await userQueries.findUser({ id: tokenData.userId });
-    res.send({
+    if (!foundUser) {
+      return next(new TokenError('User not found. (checkAuth)'));
+    }
+
+    req.user = {
       firstName: foundUser.firstName,
       lastName: foundUser.lastName,
       role: foundUser.role,
@@ -21,21 +35,34 @@ module.exports.checkAuth = async (req, res, next) => {
       displayName: foundUser.displayName,
       balance: foundUser.balance,
       email: foundUser.email,
-    });
+    };
+
+    next();
   } catch (err) {
-    next(new TokenError());
+    console.error('Error during token verification:', err);
+    req.user = null;
+    return next();
   }
 };
 
+
+
+
 module.exports.checkToken = async (req, res, next) => {
-  const accessToken = req.headers.authorization;
-  if (!accessToken) {
-    return next(new TokenError('need token 111'));
+  const authorizationHeader = req.headers.authorization;
+  if (!authorizationHeader) {
+    req.tokenData = null;
+    return next();
   }
+
   try {
-    req.tokenData = jwt.verify(accessToken, CONSTANTS.JWT_SECRET);
+    const token = authorizationHeader.split(' ')[1];
+    req.tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
     next();
   } catch (err) {
-    next(new TokenError());
+    req.tokenData = null;
+    next();
   }
 };
+
+

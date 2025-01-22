@@ -205,4 +205,17 @@ module.exports.cashout = async (req, res, next) => {
   }
 };
 
+module.exports.getUser = async (req, res, next) => {
+ try {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized. Please log in.' });
+  }
+  res.status(200).json({
+    message: 'User information retrieved successfully.',
+    user: req.user,
+  });
+  } catch (error) {
+      next(error);
+    }
+};
 
