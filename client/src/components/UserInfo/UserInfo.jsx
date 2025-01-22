@@ -17,8 +17,11 @@ const UserInfo = (props) => {
   };
 
   const { isEdit, changeEditMode, data } = props;
+  
   const { avatar, firstName, lastName, displayName, email, role, balance } =
-    data;
+  data.user;
+    console.log(data.user);
+    
   return (
     <div className={styles.mainContainer}>
       {isEdit ? (
@@ -28,7 +31,7 @@ const UserInfo = (props) => {
           <img
             src={
               avatar && avatar !== 'anon.png'
-                ? `${CONSTANTS.publicURL}/${avatar}`
+                ? `${CONSTANTS.publicURL}` + avatar
                 : CONSTANTS.ANONYM_IMAGE_PATH
             }
             className={styles.avatar}

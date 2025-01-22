@@ -153,9 +153,9 @@ module.exports.updateUser = async (req, res, next) => {
   try {
     if (req.file) {
       req.body.avatar = req.file.filename;
-    }
+    }    
     const updatedUser = await userQueries.updateUser(req.body,
-      req.tokenData.userId);
+      req.tokenData.Id);
     res.send({
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
@@ -210,6 +210,8 @@ module.exports.getUser = async (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized. Please log in.' });
   }
+  console.log(req.user);
+  
   res.status(200).json({
     message: 'User information retrieved successfully.',
     user: req.user,

@@ -5,7 +5,7 @@ export const loginRequest = (data) => http.post('login', data);
 export const updateContest = (data) => http.put('/contests/updateContest', data);
 export const setNewOffer = (data) => http.post('/contests/setNewOffer', data);
 export const setOfferStatus = (data) => http.post('/contests/setOfferStatus', data);
-export const getUser = () => http.get('/users/getUser');
+export const getUser = (data) => http.get('/users/getUser', data);
 
 export const payMent = (data) => http.post('/users/pay', data.formData);
 export const changeMark = (data) => http.post('/users/changeMark', data);

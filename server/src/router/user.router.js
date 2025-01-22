@@ -16,7 +16,9 @@ const { uploadContestFiles, uploadAvatar } = require('../utils/fileUpload');
 const { checkAuth } = require('../middlewares/checkToken');
 
 const router = Router();
-router.get('/getUser', checkAuth, getUser);
+router.use(checkAuth);
+
+router.get('/getUser', getUser);
 router.post('/changeMark', onlyForCustomer, changeMark);
 router.post('/cashout', onlyForCreative, cashout);
 router.post('/pay',

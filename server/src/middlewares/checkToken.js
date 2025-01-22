@@ -5,7 +5,6 @@ const userQueries = require('../controllers/queries/userQueries');
 
 module.exports.checkAuth = async (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
-  console.log('Authorization header:', authorizationHeader);
   if (!authorizationHeader) {
     req.user = null;
     return next();
@@ -13,14 +12,11 @@ module.exports.checkAuth = async (req, res, next) => {
 
   try {
     const token = authorizationHeader
-    console.log('Token extracted:', token);
     if (!token) {
       return next(new TokenError('Token is missing or malformed.'));
     }
 
     const tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
-    console.log('Token data:', tokenData);
-
     const foundUser = await userQueries.findUser({ id: tokenData.userId });
     if (!foundUser) {
       return next(new TokenError('User not found. (checkAuth)'));

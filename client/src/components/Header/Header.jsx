@@ -55,13 +55,13 @@ const Header = ({ data, isFetching, getUser, clearUserStore, completedEventsCoun
           <div className={styles.userInfo}>
             <img
               src={
-                data.avatar === 'anon.png'
+                data.user.avatar === 'anon.png'
                   ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.publicURL}/${data.avatar}`
+                  : `${CONSTANTS.publicURL}${data.user.avatar}`
               }
               alt="user"
             />
-            <span>{`Hi, ${data.displayName}`}</span>
+            <span>{`Hi, ${data.user.displayName}`}</span>
             <img
               src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
               alt="menu"
