@@ -58,7 +58,7 @@ const UserProfile = (props) => {
           </div>
         </div>
         {profileViewMode === CONSTANTS.USER_INFO_MODE ? (
-          <UserInfo key={JSON.stringify(props.data)}/>
+          <UserInfo/>
         ) : (
           <div className={styles.container}>
             {parseInt(balance) === 0 ? (

@@ -3,10 +3,12 @@ const authRouter = require('./auth.router');
 const userRouter = require('./user.router');
 const contestRouter = require('./contest.router');
 const chatRouter = require('./chat.router');
+const { checkAuth, checkToken } = require('../middlewares/checkToken');
 
 const router = express.Router();
 
-
+router.use(checkAuth);
+router.use(checkToken);
 router.use('/', authRouter);
 router.use('/users', userRouter);
 router.use('/contests', contestRouter);

@@ -42,9 +42,6 @@ module.exports.checkAuth = async (req, res, next) => {
   }
 };
 
-
-
-
 module.exports.checkToken = async (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
   if (!authorizationHeader) {
@@ -53,7 +50,7 @@ module.exports.checkToken = async (req, res, next) => {
   }
 
   try {
-    const token = authorizationHeader.split(' ')[1];
+    const token = authorizationHeader;
     req.tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
     next();
   } catch (err) {
