@@ -2,6 +2,7 @@
 
 .*
 *.log
+./public/images
 
 !.gitignore
 error.log

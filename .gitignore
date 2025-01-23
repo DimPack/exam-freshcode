@@ -3,7 +3,7 @@
 .vscode/
 error.log
 /Log/
-
+./public/images
 ./client/node_modules/
 ./server/node_modules/
 ./server/uploadFiles
