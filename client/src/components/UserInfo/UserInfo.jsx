@@ -20,7 +20,6 @@ const UserInfo = (props) => {
   
   const { avatar, firstName, lastName, displayName, email, role, balance } =
   data.user;
-    console.log(data.user);
     
   return (
     <div className={styles.mainContainer}>

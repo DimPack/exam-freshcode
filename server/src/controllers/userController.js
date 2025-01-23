@@ -153,9 +153,11 @@ module.exports.updateUser = async (req, res, next) => {
   try {
     if (req.file) {
       req.body.avatar = req.file.filename;
-    }    
+    }
+        console.log(req.tokenData);
+        
     const updatedUser = await userQueries.updateUser(req.body,
-      req.tokenData.Id);
+      req.tokenData.userId);
     res.send({
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,

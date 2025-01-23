@@ -58,7 +58,7 @@ const UserProfile = (props) => {
           </div>
         </div>
         {profileViewMode === CONSTANTS.USER_INFO_MODE ? (
-          <UserInfo />
+          <UserInfo key={JSON.stringify(props.data)}/>
         ) : (
           <div className={styles.container}>
             {parseInt(balance) === 0 ? (
@@ -85,7 +85,7 @@ const UserProfile = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const { balance, role } = state.userStore.data;
+  const { balance, role } = state.userStore.data || {};
   const { profileViewMode } = state.userProfile;
   const { error } = state.payment;
   return {
@@ -95,7 +95,6 @@ const mapStateToProps = (state) => {
     error,
   };
 };
-
 const mapDispatchToProps = (dispatch) => ({
   cashOut: (data) => dispatch(cashOut(data)),
   changeProfileViewMode: (data) => dispatch(changeProfileViewMode(data)),

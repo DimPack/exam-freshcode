@@ -17,6 +17,7 @@ module.exports.checkAuth = async (req, res, next) => {
     }
 
     const tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
+    
     const foundUser = await userQueries.findUser({ id: tokenData.userId });
     if (!foundUser) {
       return next(new TokenError('User not found. (checkAuth)'));

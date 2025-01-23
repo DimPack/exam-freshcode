@@ -13,10 +13,11 @@ const {
 } = require('../middlewares/basicMiddlewares');
 const { validateContestCreation } = require('../middlewares/validators');
 const { uploadContestFiles, uploadAvatar } = require('../utils/fileUpload');
-const { checkAuth } = require('../middlewares/checkToken');
+const { checkAuth, checkToken } = require('../middlewares/checkToken');
 
 const router = Router();
 router.use(checkAuth);
+router.use(checkToken);
 
 router.get('/getUser', getUser);
 router.post('/changeMark', onlyForCustomer, changeMark);
