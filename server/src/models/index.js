@@ -59,10 +59,10 @@ db['Ratings'].belongsTo(db['Offers'], { foreignKey: 'offerId', targetKey: 'id'})
 db['Users'].hasMany(db['Catalog'], { foreignKey: 'userId', targetKey: 'id',});
 db['Catalog'].belongsTo(db['Users'], { foreignKey: 'userId', targetKey: 'id' });
 
-db['Users'].hasMany(db['Message'], { foreignKey: 'senderId', targetKey: 'id' });
 db['Message'].belongsTo(db['Users'], { foreignKey: 'senderId', targetKey: 'id' });
+db['Users'].hasMany(db['Message'], { foreignKey: 'senderId', targetKey: 'id' });
 
-db['Conversation'].hasMany(db['Message'], { foreignKey: 'conversationId', targetKey: 'id' });
+db['Conversation'].hasMany(db['Message'], { foreignKey: 'conversationId', targetKey: 'id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 db['Message'].belongsTo(db['Conversation'], { foreignKey: 'conversationId', targetKey: 'id' });
 
 db.sequelize = sequelize;
