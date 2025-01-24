@@ -7,7 +7,6 @@ const { checkAuth, checkToken } = require('../middlewares/checkToken');
 
 const router = express.Router();
 
-router.use(checkAuth);
 router.use(checkToken);
 router.use('/', authRouter);
 router.use('/users', userRouter);

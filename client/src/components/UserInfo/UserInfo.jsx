@@ -19,7 +19,7 @@ const UserInfo = (props) => {
   const { isEdit, changeEditMode, data } = props;
   
   const { avatar, firstName, lastName, displayName, email, role, balance } =
-  data.user;
+  data;
     
   return (
     <div className={styles.mainContainer}>
