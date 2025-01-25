@@ -52,16 +52,24 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+      },
     })
-      .then(() => queryInterface.addConstraint('Users',  {
+    .then(() =>
+      queryInterface.addConstraint('Users', {
         type: 'check',
         fields: ['balance'],
-        where: {
-          balance: {
-            [ Sequelize.Op.gte ]: 0,
-          },
-        },
-      }));
+        where: Sequelize.literal('balance >= 0'),
+      })
+    );
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Users');

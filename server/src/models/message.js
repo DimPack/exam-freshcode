@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'Users',
           key: 'id',
+          validate: {
+            notNull: { msg: 'Sender ID cannot be null' },
+            isInt: { msg: 'Sender ID must be an integer' },
+          },
         },
       },
       body: {
@@ -47,6 +51,10 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'Conversations',
           key: 'id',
+          validate: {
+            notNull: { msg: 'Conversations ID cannot be null' },
+            isInt: { msg: 'Conversations ID must be an integer' },
+          },
         },
       },
       createdAt: {
@@ -64,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'Message',
       tableName: 'messages',
-      underscored: true, // Використання snake_case для назв колонок
+      underscored: true,
     }
   );
 
