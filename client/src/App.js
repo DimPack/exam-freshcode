@@ -23,6 +23,7 @@ import PrivateRoute from './components/Routes/PrivateRoute/PrivateRoute';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import ToDoEvents from './pages/ToDoEvents/ToDoEvents';
 import ModeratorPage from './pages/ModeratorPage/ModeratorPage';
+import ModeratorRouter from './components/Routes/ModeratorRouter/ModeratorRouter';
 
 const App = () => {
   const [completedEventsCount, setCompletedEventsCount] = useState(0);
@@ -45,6 +46,7 @@ const App = () => {
         pauseOnHover
       />
       <Routes>
+
         <Route path="/" element={<Layout completedEventsCount={completedEventsCount}/>}>
           <Route index element={<Home />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
@@ -88,10 +90,10 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/contest/:id" element={<ContestPage />} />
             <Route path="/account" element={<UserProfile />} />
-            <Route path="/moderator" element={<ModeratorPage />} />
-
           </Route>
-
+          <Route element={<ModeratorRouter />}>
+            <Route path="/moderator" element={<ModeratorPage />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

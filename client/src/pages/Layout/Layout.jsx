@@ -13,9 +13,10 @@ const Layout = ({completedEventsCount}) => {
   const { data } = useSelector((state) => state.userStore);
   const isRegisterPathname = pathname === '/registration';
   const isAuthPathname = pathname === '/login' || isRegisterPathname;
+  
 
-  if (data?.role === 'moderator' && pathname !== '/moderator') {
-    return <ModeratorPage data={data} />;
+  if (data?.role === 'moderator' && pathname !== '/moderator' && pathname !== '/account') {
+    return <Navigate to="/moderator" replace />;
   }
 
   return (
