@@ -14,7 +14,8 @@ class LoginForm extends React.Component {
   }
 
   clicked = (values) => {
-    this.props.loginRequest({ data: values, navigate: this.props.navigate });
+    const { navigate } = this.props;
+    this.props.loginRequest({ data: values, navigate });
   };
 
   render() {

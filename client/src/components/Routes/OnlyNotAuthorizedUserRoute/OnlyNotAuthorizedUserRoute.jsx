@@ -11,7 +11,7 @@ const OnlyNotAuthorizedUserRoute = () => {
 
   useEffect(() => {
     dispatch(getUser(navigate));
-  }, []);
+  }, [navigate]);
 
   if (isFetching) {
     return <Spinner />;

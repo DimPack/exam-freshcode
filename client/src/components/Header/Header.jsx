@@ -307,7 +307,7 @@ const Header = ({ data, isFetching, getUser, clearUserStore, completedEventsCoun
   );
 };
 
-const mapStateToProps = (state) => state.userStore;
+const mapStateToProps = (state) => state.userStore; 
 const mapDispatchToProps = {
   getUser,
   clearUserStore,

@@ -216,10 +216,9 @@ module.exports.setOfferStatus = async (req, res, next) => {
 };
 
 module.exports.getCustomersContests = (req, res, next) => {
-  // Перевіряємо наявність статусу і userId
   const { status } = req.headers;
   const { userId } = req.tokenData;
-  const limit = parseInt(req.query.limit, 10) || 8; // Дефолтне значення 8
+  const limit = parseInt(req.query.limit, 10) || 8;
   const offset = parseInt(req.query.offset, 10) || 0;
 
   if (!status || !userId) {
@@ -249,8 +248,8 @@ module.exports.getCustomersContests = (req, res, next) => {
       res.send({ contests, haveMore });
     })
     .catch(err => {
-      console.error(err); // Додатковий лог для дебагу
-      next(new Error('Failed to get contests')); // Можна замінити на ServerError, якщо це визначено
+      console.error(err);
+      next(new Error('Failed to get contests')); 
     });
 };
 
