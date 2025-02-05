@@ -5,7 +5,6 @@ import Spinner from '../../Spinner/Spinner';
 
 const ModeratorRouter = () => {
   const { data, isFetching } = useSelector((state) => state.userStore);
-  console.log(data);
 
   useEffect(() => {
     if (isFetching) return;

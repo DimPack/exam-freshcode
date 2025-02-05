@@ -7,6 +7,8 @@ export const setNewOffer = (data) => http.post('/contests/setNewOffer', data);
 export const setOfferStatus = (data) => http.post('/contests/setOfferStatus', data);
 export const getUser = () => http.get('/users/getUser');
 
+export const getAllOffers = () => http.get('/moderators/getAllOffers');
+
 export const payMent = (data) => http.post('/users/pay', data.formData);
 export const changeMark = (data) => http.post('/users/changeMark', data);
 export const getDialog = (data) => http.post('/chats/getChat', data);
@@ -58,3 +60,6 @@ export const getContestById = (data) =>
       contestId: data.contestId,
     },
   });
+
+
+  
