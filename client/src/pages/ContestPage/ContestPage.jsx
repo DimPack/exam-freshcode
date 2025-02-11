@@ -39,27 +39,26 @@ class ContestPage extends React.Component {
   };
 
   setOffersList = () => {
-    const array = [];
-    for (let i = 0; i < this.props.contestByIdStore.offers.length; i++) {
-      array.push(
-        <OfferBox
-          data={this.props.contestByIdStore.offers[i]}
-          key={this.props.contestByIdStore.offers[i].id}
-          needButtons={this.needButtons}
-          setOfferStatus={this.setOfferStatus}
-          contestType={this.props.contestByIdStore.contestData.contestType}
-          date={new Date()}
-        />
-      );
+    const { offers } = this.props.contestByIdStore;
+  
+    const pendingOffers = offers.filter(offer => offer.status === CONSTANTS.OFFER_STATUS_WON);
+
+    if (pendingOffers.length === 0) {
+      return <div className={styles.notFound}>There is no suggestion at this moment</div>;
     }
-    return array.length !== 0 ? (
-      array
-    ) : (
-      <div className={styles.notFound}>
-        There is no suggestion at this moment
-      </div>
-    );
+  
+    return pendingOffers.map(offer => (
+      <OfferBox
+        data={offer}
+        key={offer.id}
+        needButtons={this.needButtons}
+        setOfferStatus={this.setOfferStatus}
+        contestType={this.props.contestByIdStore.contestData.contestType}
+        date={new Date()}
+      />
+    ));
   };
+  
 
   needButtons = (offerStatus) => {
     const contestCreatorId = this.props.contestByIdStore.contestData.User.id;
@@ -135,6 +134,7 @@ class ContestPage extends React.Component {
     } = contestByIdStore;
     return (
       <div>
+
         {/* <Chat/> */}
         {isShowOnFull && (
           <LightBox
@@ -226,4 +226,7 @@ const mapDispatchToProps = (dispatch) => ({
   changeShowImage: (data) => dispatch(changeShowImage(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContestPage));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(ContestPage));

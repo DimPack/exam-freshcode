@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOffers } from '../../store/slices/moderatorSlice';
+import style from './ModeratorPage.module.sass';
+import cx from 'classnames';
 
 const ModeratorPage = () => {
   const dispatch = useDispatch();
@@ -25,20 +27,37 @@ const ModeratorPage = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const isNextPageAvailable = offers.length === limit; // Перевірка для наступної сторінки
+  const isNextPageAvailable = offers.length === limit;
 
+  const textContext = cx(style.creativeInfo, style.textContest);
   return (
     <div>
-      <h1>Moderator Page</h1>
-      <div>
-        <h2>Список всіх оферів</h2>
+      <div className={style.moderatorBlock}>
+        <h2 className={style.title}>List of all offers</h2>
         {offers.length === 0 ? (
-          <p>Оферів немає</p>
+          <p className={style.noOffers}>No offers available</p>
         ) : (
-          <ul>
+          <ul className={style.list}>
             {offers.map((offer) => (
-              <li key={offer.id}>
-                Хто подав Офер: == first name creative:*{offer.User.firstName}*last name creative:*{offer.User.lastName} = {offer.text} status — {offer.status} Хто створив контест — {offer.Contest.User.email}
+              <li key={offer.id} className={style.item}>
+                <div className={style.creativeInfo}>
+                  <p className={style.creativeName}>created an offer</p>
+                  <p className={style.titleCreative}>first name: <span className={style.infoCreative}>{offer.User.firstName}</span></p>
+                  <p className={style.titleCreative}>last name: <span className={style.infoCreative}>{offer.User.lastName}</span></p>
+                  <p className={style.titleCreative}>email: <span className={style.infoCreative}>{offer.User.email}</span></p>
+                </div>
+                <div className={textContext}>
+                  <p className={style.creativeName}>offer text</p>
+                  <p>{offer.text}</p>
+                </div>
+                <div className={style.creativeInfo}>
+                  <p className={style.creativeName}>status</p>
+                  <p>{offer.status}</p>
+                </div>
+                <div className={style.creativeInfo}>
+                  <p className={style.creativeName}>created a contest</p>
+                  <p>{offer.Contest.User.email}</p>
+                </div>
               </li>
             ))}
           </ul>
