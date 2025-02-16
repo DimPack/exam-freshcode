@@ -8,6 +8,21 @@ export const setOfferStatus = (data) => http.post('/contests/setOfferStatus', da
 export const getUser = () => http.get('/users/getUser');
 
 export const getAllOffers = () => http.get('/moderators/getAllOffers');
+export const updateOfferStatus = (data) => {
+  return http.patch('/moderators/updateOfferStatus', data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => {
+    return response;
+  }).catch(error => {
+    console.error('Error updating offer status:', error);
+    throw error;
+  });
+};
+
+
+
 
 export const payMent = (data) => http.post('/users/pay', data.formData);
 export const changeMark = (data) => http.post('/users/changeMark', data);

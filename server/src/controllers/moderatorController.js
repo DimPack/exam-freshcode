@@ -6,12 +6,10 @@ module.exports.getAllOffers = async (req, res, next) => {
         return res.status(403).json({ message: 'Access denied' });
       }
   
-      console.log("Fetching offers...");
-  
       const offers = await bd.Offers.findAll({
         include: [
           {
-            model: bd.Users,  // Інформація про користувачів, які подають офери
+            model: bd.Users,
             attributes: ['id', 'firstName', 'lastName', 'email'],
           },
           {
@@ -28,14 +26,45 @@ module.exports.getAllOffers = async (req, res, next) => {
         ],
       });
   
-      console.log("Offers fetched:", offers);
-  
       res.status(200).json({
         message: 'Offers retrieved successfully.',
-        offers,
+        offers
       });
     } catch (error) {
-      console.error("Error fetching offers:", error);
       next(error);
     }
 };
+
+
+module.exports.updateOfferStatus = async (req, res, next) => {
+  try {
+      console.log("Received body:", req.body); // Додаємо лог
+      
+      if (req.tokenData.role !== 'moderator') {
+          return res.status(403).send('Access denied');
+      }
+
+      const { offerId, status } = req.body;
+
+      if (!["won", "rejected"].includes(status)) {
+          return res.status(400).send("Invalid status value");
+      }
+
+      const offer = await bd.Offers.findByPk(offerId);
+      if (!offer) {
+          return res.status(404).send("Offer not found");
+      }
+
+      offer.status = status;
+      await offer.save();
+
+      res.status(200).send({
+        message: "Offer status updated successfully",
+        offer: offer
+      });
+  } catch (error) {
+      next(error);
+  }
+};
+
+
