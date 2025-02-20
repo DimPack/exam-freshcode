@@ -2,6 +2,8 @@ const bd = require('../models');
 
 module.exports.getAllOffers = async (req, res, next) => {
     try {
+      const { pagination } = req;
+
       if (req.tokenData.role !== 'moderator') {
         return res.status(403).json({ message: 'Access denied' });
       }
@@ -24,6 +26,7 @@ module.exports.getAllOffers = async (req, res, next) => {
             ],
           },
         ],
+        ...pagination,
       });
   
       res.status(200).json({
