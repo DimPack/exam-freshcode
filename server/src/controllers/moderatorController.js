@@ -1,41 +1,41 @@
 const bd = require('../models');
 
 module.exports.getAllOffers = async (req, res, next) => {
-    try {
-      const { pagination } = req;
+  try {
+    const { pagination } = req;
 
-      if (req.tokenData.role !== 'moderator') {
-        return res.status(403).json({ message: 'Access denied' });
-      }
-  
-      const offers = await bd.Offers.findAll({
-        include: [
-          {
-            model: bd.Users,
-            attributes: ['id', 'firstName', 'lastName', 'email'],
-          },
-          {
-            model: bd.Contests,
-            attributes: ['id', 'title', 'userId'],
-            include: [
-              {
-                model: bd.Users,  
-                attributes: ['id', 'firstName', 'lastName', 'email'],
-                required: true, 
-              },
-            ],
-          },
-        ],
-        ...pagination,
-      });
-  
-      res.status(200).json({
-        message: 'Offers retrieved successfully.',
-        offers
-      });
-    } catch (error) {
-      next(error);
+    if (req.tokenData.role !== 'moderator') {
+      return res.status(403).json({ message: 'Access denied' });
     }
+
+    const offers = await bd.Offers.findAll({
+      include: [
+        {
+          model: bd.Users,
+          attributes: ['id', 'firstName', 'lastName', 'email'],
+        },
+        {
+          model: bd.Contests,
+          attributes: ['id', 'title', 'userId'],
+          include: [
+            {
+              model: bd.Users,
+              attributes: ['id', 'firstName', 'lastName', 'email'],
+              required: true,
+            },
+          ],
+        },
+      ],
+      ...pagination,
+    });
+
+    res.status(200).json({
+      message: 'Offers retrieved successfully.',
+      offers,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 

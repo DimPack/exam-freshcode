@@ -29,7 +29,7 @@ module.exports = {
   NEW_MESSAGE: 'newMessage',
   CHANGE_BLOCK_STATUS: 'CHANGE_BLOCK_STATUS',
   LIMIT_PAGINATION: {
-    MIN: 2,
-    MAX: 20,
+    MIN: 5,
+    MAX: 10,
   }
 };

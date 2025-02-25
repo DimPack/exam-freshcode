@@ -1,5 +1,6 @@
 const constants = require('../constants');
 const { LIMIT_PAGINATION } = constants;
+
 module.exports.paginate = async (req, res, next) => {
   try {
     const {

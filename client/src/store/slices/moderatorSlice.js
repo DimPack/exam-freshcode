@@ -18,7 +18,7 @@ export const fetchAllOffers = createAsyncThunk(
 export const updateOfferStatus = createAsyncThunk(
   `${MODERATOR_SLICE_NAME}/updateOfferStatus`,
   async ({ offerId, status }, { rejectWithValue }) => {
-    try {      
+    try {
       const response = await restController.updateOfferStatus({ offerId, status });
       return response.data.offer;
     } catch (error) {
@@ -54,22 +54,13 @@ const moderatorSlice = createSlice({
       })
       .addCase(updateOfferStatus.fulfilled, (state, action) => {
         state.loading = false;
-        console.log('action.payload:', action.payload);
-
         const updatedOffer = action.payload;
-
-        if (updatedOffer) {
-          state.offers = state.offers.map((offer) => 
-            offer.id === updatedOffer.id 
-              ? { ...offer, status: updatedOffer.status } 
-              : offer
-          );
-        } else {
-          console.error('No updated offer received');
+        const index = state.offers.findIndex((offer) => offer.id === updatedOffer.id);
+        if (index !== -1) {
+          state.offers[index] = updatedOffer;
         }
       })
       .addCase(updateOfferStatus.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload;
       });
   },

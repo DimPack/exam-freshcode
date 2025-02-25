@@ -4,6 +4,7 @@ import { fetchAllOffers, updateOfferStatus } from '../../store/slices/moderatorS
 import styles from './ModeratorPage.module.sass';
 import { statusIcons } from './statusIcons'; 
 import cx from 'classnames';
+import Pagination from '../../components/Pagination/Pagination';
 
 const ModeratorPage = () => {
   const dispatch = useDispatch();
@@ -93,14 +94,12 @@ const ModeratorPage = () => {
           </ul>
         )}
       </div>
-      <div className={styles.pagination}>
-        <button onClick={handlePrevPage} disabled={page === 1}>
-          Previous page
-        </button>
-        <button onClick={handleNextPage} disabled={!isNextPageAvailable}>
-          Next page
-        </button>
-      </div>
+      <Pagination 
+        page={page} 
+        isNextPageAvailable={isNextPageAvailable} 
+        handlePrevPage={handlePrevPage} 
+        handleNextPage={handleNextPage} 
+      />
     </div>
   );
 };
