@@ -14,8 +14,12 @@ export const getAllOffers = (params) => {
       amount: params.limit,
     },
   });
+<<<<<<< HEAD
 };
 export const updateOfferStatus = (data) => {
+=======
+};export const updateOfferStatus = (data) => {
+>>>>>>> test
   return http.patch('/moderators/updateOfferStatus', data, {
     headers: {
       'Content-Type': 'application/json'
