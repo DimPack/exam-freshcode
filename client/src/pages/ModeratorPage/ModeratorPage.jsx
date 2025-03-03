@@ -24,7 +24,6 @@ const ModeratorPage = () => {
       setPage((prevPage) => prevPage - 1);
     }
   };
-  
 
   const handleStatusChange = async (offerId, status) => {
     await dispatch(updateOfferStatus({ offerId, status }));
@@ -37,18 +36,27 @@ const ModeratorPage = () => {
 
   const textContext = cx(styles.creativeInfo, styles.textContest);
 
+  // Функція сортування оферів за статусом
+  const sortOffersByStatus = (offers) => {
+    const statusOrder = { pending: 1, rejected: 2, won: 3 };
+    return [...offers].sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+  };
+
+  // Сортування оферів перед відображенням
+  const sortedOffers = sortOffersByStatus(offers);
+
   return (
     <div>
       <div className={styles.moderatorBlock}>
         <h2 className={styles.title}>List of all offers</h2>
-        {offers.length === 0 ? (
+        {sortedOffers.length === 0 ? (
           <p className={styles.noOffers}>No offers available</p>
         ) : (
           <ul className={styles.list}>
-            {offers.map((offer) => (
+            {sortedOffers.map((offer) => (
               <li key={offer.id} className={styles.item}>
                 <div className={styles.creativeInfo}>
-                  <p className={styles.creativeName}>User created an offer</p>
+                  <p className={styles.creativeName}>User created an offer {offer.id}</p>
                   <p className={styles.titleCreative}>
                     First name: <span className={styles.infoCreative}>{offer.User.firstName}</span>
                   </p>
@@ -65,7 +73,6 @@ const ModeratorPage = () => {
                 </div>
                 <div className={styles.creativeInfo}>
                     <p className={styles.creativeName}>Status</p>
-                    {/* <p>{offer.status}</p> */}
                     <img src={statusIcons[offer.status]} alt={offer.status} className={styles.statusIcon} />
                 </div>
                 <div className={styles.creativeInfo}>

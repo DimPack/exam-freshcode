@@ -7,7 +7,14 @@ export const setNewOffer = (data) => http.post('/contests/setNewOffer', data);
 export const setOfferStatus = (data) => http.post('/contests/setOfferStatus', data);
 export const getUser = () => http.get('/users/getUser');
 
-export const getAllOffers = () => http.get('/moderators/getAllOffers');
+export const getAllOffers = (params) => {
+  return http.get('/moderators/getAllOffers', {
+    params: {
+      page: params.page,
+      amount: params.limit,
+    },
+  });
+};
 export const updateOfferStatus = (data) => {
   return http.patch('/moderators/updateOfferStatus', data, {
     headers: {
