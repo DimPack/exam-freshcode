@@ -36,13 +36,11 @@ const ModeratorPage = () => {
 
   const textContext = cx(styles.creativeInfo, styles.textContest);
 
-  // Функція сортування оферів за статусом
   const sortOffersByStatus = (offers) => {
     const statusOrder = { pending: 1, rejected: 2, won: 3 };
     return [...offers].sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
   };
 
-  // Сортування оферів перед відображенням
   const sortedOffers = sortOffersByStatus(offers);
 
   return (
