@@ -4,10 +4,11 @@ import { fetchAllOffers, updateOfferStatus } from '../../store/slices/moderatorS
 import styles from './ModeratorPage.module.sass';
 import { statusIcons } from './statusIcons'; 
 import cx from 'classnames';
+import Pagination from '../../components/Pagination/Pagination';
 
 const ModeratorPage = () => {
   const dispatch = useDispatch();
-  const { offers, loading, error } = useSelector((state) => state.moderator);
+  const { offers, loading, error, totalOffers } = useSelector((state) => state.moderator);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
@@ -15,14 +16,8 @@ const ModeratorPage = () => {
     dispatch(fetchAllOffers({ page, limit }));
   }, [dispatch, page, limit]);
 
-  const handleNextPage = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
-  
-  const handlePrevPage = () => {
-    if (page > 1) {
-      setPage((prevPage) => prevPage - 1);
-    }
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
   const handleStatusChange = async (offerId, status) => {
@@ -32,7 +27,8 @@ const ModeratorPage = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const isNextPageAvailable = offers.length === limit;
+  const totalPages = offers.length === limit;
+  // const isNextPageAvailable = offers.length === limit;
 
   const textContext = cx(styles.creativeInfo, styles.textContest);
 
@@ -98,14 +94,11 @@ const ModeratorPage = () => {
           </ul>
         )}
       </div>
-      <div className={styles.pagination}>
-        <button onClick={handlePrevPage} disabled={page === 1}>
-          Previous page
-        </button>
-        <button onClick={handleNextPage} disabled={!isNextPageAvailable}>
-          Next page
-        </button>
-      </div>
+      <Pagination 
+        currentPage={page} 
+        totalPages={totalPages} 
+        onPageChange={handlePageChange} 
+      />
     </div>
   );
 };
