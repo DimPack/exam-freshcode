@@ -95,16 +95,9 @@ const ModeratorPage = () => {
         )}
       </div>
       <Pagination 
-<<<<<<< HEAD
-        page={page} 
-        isNextPageAvailable={isNextPageAvailable} 
-        handlePrevPage={handlePrevPage} 
-        handleNextPage={handleNextPage} 
-=======
         currentPage={page} 
         totalPages={totalPages} 
         onPageChange={handlePageChange} 
->>>>>>> moderator
       />
     </div>
   );

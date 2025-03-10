@@ -27,13 +27,10 @@ module.exports.getAllOffers = async (req, res, next) => {
           ],
         },
       ],
-<<<<<<< HEAD
       ...pagination,
-=======
       limit: pagination.limit,
       offset: pagination.offset,
-      order: [['id', 'ASC']], // Додавання сортування за id
->>>>>>> moderator
+      order: [['id', 'ASC']],
     });
 
     res.status(200).json({
