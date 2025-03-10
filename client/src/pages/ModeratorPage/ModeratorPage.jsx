@@ -8,7 +8,7 @@ import Pagination from '../../components/Pagination/Pagination';
 
 const ModeratorPage = () => {
   const dispatch = useDispatch();
-  const { offers, loading, error } = useSelector((state) => state.moderator);
+  const { offers, loading, error, totalOffers } = useSelector((state) => state.moderator);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
 
@@ -16,16 +16,9 @@ const ModeratorPage = () => {
     dispatch(fetchAllOffers({ page, limit }));
   }, [dispatch, page, limit]);
 
-  const handleNextPage = () => {
-    setPage((prevPage) => prevPage + 1);
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
-  
-  const handlePrevPage = () => {
-    if (page > 1) {
-      setPage((prevPage) => prevPage - 1);
-    }
-  };
-  
 
   const handleStatusChange = async (offerId, status) => {
     await dispatch(updateOfferStatus({ offerId, status }));
@@ -34,22 +27,30 @@ const ModeratorPage = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const isNextPageAvailable = offers.length === limit;
+  const totalPages = offers.length === limit;
+  // const isNextPageAvailable = offers.length === limit;
 
   const textContext = cx(styles.creativeInfo, styles.textContest);
+
+  const sortOffersByStatus = (offers) => {
+    const statusOrder = { pending: 1, rejected: 2, won: 3 };
+    return [...offers].sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+  };
+
+  const sortedOffers = sortOffersByStatus(offers);
 
   return (
     <div>
       <div className={styles.moderatorBlock}>
         <h2 className={styles.title}>List of all offers</h2>
-        {offers.length === 0 ? (
+        {sortedOffers.length === 0 ? (
           <p className={styles.noOffers}>No offers available</p>
         ) : (
           <ul className={styles.list}>
-            {offers.map((offer) => (
+            {sortedOffers.map((offer) => (
               <li key={offer.id} className={styles.item}>
                 <div className={styles.creativeInfo}>
-                  <p className={styles.creativeName}>User created an offer</p>
+                  <p className={styles.creativeName}>User created an offer {offer.id}</p>
                   <p className={styles.titleCreative}>
                     First name: <span className={styles.infoCreative}>{offer.User.firstName}</span>
                   </p>
@@ -66,7 +67,6 @@ const ModeratorPage = () => {
                 </div>
                 <div className={styles.creativeInfo}>
                     <p className={styles.creativeName}>Status</p>
-                    {/* <p>{offer.status}</p> */}
                     <img src={statusIcons[offer.status]} alt={offer.status} className={styles.statusIcon} />
                 </div>
                 <div className={styles.creativeInfo}>
@@ -95,10 +95,16 @@ const ModeratorPage = () => {
         )}
       </div>
       <Pagination 
+<<<<<<< HEAD
         page={page} 
         isNextPageAvailable={isNextPageAvailable} 
         handlePrevPage={handlePrevPage} 
         handleNextPage={handleNextPage} 
+=======
+        currentPage={page} 
+        totalPages={totalPages} 
+        onPageChange={handlePageChange} 
+>>>>>>> moderator
       />
     </div>
   );

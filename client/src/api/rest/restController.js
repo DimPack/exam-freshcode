@@ -15,6 +15,9 @@ export const getAllOffers = (params) => {
     },
   });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> moderator
 };
 export const updateOfferStatus = (data) => {
 =======

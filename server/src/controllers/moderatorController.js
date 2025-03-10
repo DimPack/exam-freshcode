@@ -1,4 +1,5 @@
 const bd = require('../models');
+const mailer = require('../nodemailer');
 
 module.exports.getAllOffers = async (req, res, next) => {
   try {
@@ -26,7 +27,13 @@ module.exports.getAllOffers = async (req, res, next) => {
           ],
         },
       ],
+<<<<<<< HEAD
       ...pagination,
+=======
+      limit: pagination.limit,
+      offset: pagination.offset,
+      order: [['id', 'ASC']], // Додавання сортування за id
+>>>>>>> moderator
     });
 
     res.status(200).json({
@@ -40,31 +47,51 @@ module.exports.getAllOffers = async (req, res, next) => {
 
 
 module.exports.updateOfferStatus = async (req, res, next) => {
-  try {
-      console.log("Received body:", req.body); // Додаємо лог
-      
-      if (req.tokenData.role !== 'moderator') {
-          return res.status(403).send('Access denied');
+  try {      
+    if (req.tokenData.role !== 'moderator') {
+        return res.status(403).send('Access denied');
+    }
+
+    const { offerId, status } = req.body;
+
+    if (!["won", "rejected"].includes(status)) {
+        return res.status(400).send("Invalid status value");
+    }
+
+    const offer = await bd.Offers.findByPk(offerId, {
+      include: [
+        {
+          model: bd.Users,
+          attributes: ['email'],
+        },
+      ],
+    });
+    if (!offer) {
+        return res.status(404).send("Offer not found");
+    }
+
+    offer.status = status;
+    await offer.save();
+    console.log(offer);
+    
+    const mailOptions = {
+      to: offer.User.email,
+      subject: 'Offer Status Updated',
+      text: `The status of your offer has been updated to: ${status}`,
+    };
+
+    mailer.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+      } else {
+        console.log('Email sent:', info.response);
       }
+    });
 
-      const { offerId, status } = req.body;
-
-      if (!["won", "rejected"].includes(status)) {
-          return res.status(400).send("Invalid status value");
-      }
-
-      const offer = await bd.Offers.findByPk(offerId);
-      if (!offer) {
-          return res.status(404).send("Offer not found");
-      }
-
-      offer.status = status;
-      await offer.save();
-
-      res.status(200).send({
-        message: "Offer status updated successfully",
-        offer: offer
-      });
+    res.status(200).send({
+      message: "Offer status updated successfully",
+      offer: offer
+    });
   } catch (error) {
       next(error);
   }
