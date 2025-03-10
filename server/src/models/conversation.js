@@ -3,70 +3,37 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Conversation extends Model {
     static associate(models) {
-      // Зв’язок із таблицею Messages
-      Conversation.hasMany(models.Message, {
-        foreignKey: 'conversationId',
-        as: 'messages',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      });
+      Conversation.hasMany(models.Message, { foreignKey: 'conversationId' });
     }
   }
+
   Conversation.init(
     {
       favoriteList: {
-        field: 'favorite_list',
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        type: DataTypes.ARRAY(DataTypes.BOOLEAN),
+        defaultValue: [false, false],
         validate: {
-          notNull: {
-            msg: 'Favorite list cannot be null',
-          },
-          isBoolean(value) {
-            if (typeof value !== 'boolean') {
-              throw new Error('Favorite list must be a boolean');
+          isArrayOfBooleans(value) {
+            if (!Array.isArray(value) || !value.every(item => typeof item === 'boolean')) {
+              throw new Error('Favorite list must be an array of booleans');
             }
           },
         },
       },
       blackList: {
-        field: 'black_list',
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        type: DataTypes.ARRAY(DataTypes.BOOLEAN),
+        defaultValue: [false, false],
         validate: {
-          notNull: {
-            msg: 'Black list cannot be null',
-          },
-          isBoolean(value) {
-            if (typeof value !== 'boolean') {
-              throw new Error('Black list must be a boolean');
+          isArrayOfBooleans(value) {
+            if (!Array.isArray(value) || !value.every(item => typeof item === 'boolean')) {
+              throw new Error('Black list must be an array of booleans');
             }
           },
         },
       },
       participants: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false,
-        type: DataTypes.ARRAY(DataTypes.INTEGER), // Виправлення типу на масив
-        validate: {
-          notEmpty: true,
-          isArray(value) {
-            if (!Array.isArray(value)) {
-              throw new Error('Participants must be an array of integers');
-            }
-          },
-        },
-      },
-      createdAt: {
-        field: 'created_at',
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        field: 'updated_at',
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
       },
     },
     {
@@ -76,5 +43,6 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
+
   return Conversation;
 };

@@ -12,8 +12,10 @@ import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
 
 class Dialog extends React.Component {
   componentDidMount() {
-    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
-    this.scrollToBottom();
+    if (this.props.interlocutor && this.props.interlocutor.id) {
+      this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+      this.scrollToBottom();
+    }
   }
 
   messagesEnd = React.createRef();
@@ -23,8 +25,9 @@ class Dialog extends React.Component {
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.interlocutor.id !== this.props.interlocutor.id)
+    if (nextProps.interlocutor && nextProps.interlocutor.id !== this.props.interlocutor.id) {
       this.props.getDialog({ interlocutorId: nextProps.interlocutor.id });
+    }
   }
 
   componentWillUnmount() {
