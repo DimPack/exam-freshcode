@@ -18,10 +18,10 @@ const router = Router();
 // router.post('/newMessage', addMessage);
 router.post('/createCatalog', createCatalog);
 
-router.post('/getChat', getChat);
+// router.post('/getChat', getChat);
 
 // router.get('/getPreview', getPreview);
-// router.post('/getChat', getChatSql);
+router.post('/getChat', getChatSql);
 router.post('/newMessage', addMessageSql);
 router.get('/getPreview', getPreviewSql);
 
