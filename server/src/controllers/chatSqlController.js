@@ -1,30 +1,30 @@
-const { Op } = require('sequelize');
-const { Conversation, Message } = require('../models');
 const db = require('../models');
-
 const controller = require('../socketInit');
+const { Op, Sequelize } = require('sequelize');
+const { Conversation, Message, Users } = require('../models');
+const sequelize = require('../models').sequelize; // Додано імпорт sequelize
 
 module.exports.getPreviewSql = async (req, res, next) => {
   try {
     const userId = req.tokenData.userId;
 
     // Отримати всі розмови, в яких бере участь користувач
-    const conversations = await db.Conversation.findAll({
-      include: [
-        {
-          model: db.Message,
-          as: 'messages', // Використовуйте правильний псевдонім
-          attributes: ['body', 'createdAt'],
-          order: [['createdAt', 'DESC']],
-          limit: 1,
-        },
-      ],
+    const conversations = await Conversation.findAll({
       where: {
         participants: {
           [Op.contains]: [userId],
         },
       },
       order: [['updatedAt', 'DESC']],
+      include: [
+        {
+          model: Message,
+          as: 'messages',
+          attributes: ['body', 'createdAt'],
+          order: [['createdAt', 'DESC']],
+          limit: 1,
+        },
+      ],
     });
 
     // Отримати всіх співрозмовників
@@ -38,33 +38,41 @@ module.exports.getPreviewSql = async (req, res, next) => {
       }
     });
 
-    const senders = await db.User.findAll({
+    const senders = await Users.findAll({
       where: {
         id: interlocutors,
       },
       attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
     });
 
-    // Додати інформацію про співрозмовників до розмов
-    conversations.forEach((conversation) => {
+    // Додати інформацію про співрозмовників та останні повідомлення до розмов
+    const conversationPreviews = conversations.map((conversation) => {
       const otherParticipant = conversation.participants.find(
         (participant) => participant !== userId
       );
       const sender = senders.find(
         (sender) => sender.id === otherParticipant
       );
-      if (sender) {
-        conversation.dataValues.interlocutor = {
+      const lastMessage = conversation.messages[0];
+
+      return {
+        id: conversation.id,
+        participants: conversation.participants,
+        blackList: conversation.blackList,
+        favoriteList: conversation.favoriteList,
+        lastMessage: lastMessage ? lastMessage.body : null,
+        lastMessageCreatedAt: lastMessage ? lastMessage.createdAt : null,
+        interlocutor: sender ? {
           id: sender.id,
           firstName: sender.firstName,
           lastName: sender.lastName,
           displayName: sender.displayName,
           avatar: sender.avatar,
-        };
-      }
+        } : null,
+      };
     });
 
-    res.send(conversations);
+    res.send(conversationPreviews);
   } catch (err) {
     next(err);
   }
@@ -77,13 +85,23 @@ module.exports.addMessageSql = async (req, res, next) => {
   try {
     // Знайти або створити нову розмову
     let [newConversation, created] = await Conversation.findOrCreate({
-      where: { participants },
+      where: {
+        participants: {
+          [Op.contains]: participants,
+        },
+      },
       defaults: {
         participants,
         blackList: [false, false],
         favoriteList: [false, false],
       },
     });
+
+    // Перевірити, чи існує розмова
+    if (!created) {
+      // Якщо розмова існує, оновити дату оновлення
+      await newConversation.update({ updatedAt: new Date() });
+    }
 
     // Створити нове повідомлення
     const message = await Message.create({
