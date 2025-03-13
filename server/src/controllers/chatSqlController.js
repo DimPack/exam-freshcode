@@ -95,18 +95,14 @@ module.exports.addMessageSql = async (req, res, next) => {
         },
       },
     });
-    
+
     // Якщо розмова не знайдена, створити нову
     if (!conversation) {
-
       conversation = await Conversation.create({
         participants,
         blackList: [false, false],
         favoriteList: [false, false],
       });
-    } else {
-      // Якщо розмова існує, оновити дату оновлення
-      await conversation.update({ updatedAt: new Date() });
     }
 
     // Створити нове повідомлення
@@ -136,6 +132,7 @@ module.exports.addMessageSql = async (req, res, next) => {
       lastMessageCreatedAt: message.createdAt,
     };
 
+    // Відправка повідомлення через WebSocket
     controller.getChatController().emitNewMessage(interlocutorId, {
       message,
       preview: {
@@ -159,35 +156,8 @@ module.exports.addMessageSql = async (req, res, next) => {
       },
     });
 
-    // Отримати оновлені дані розмови
-    const updatedConversation = await Conversation.findOne({
-      where: {
-        id: conversation.id,
-      },
-      include: [
-        {
-          model: Message,
-          as: 'messages', // Вказати псевдонім
-          order: [['createdAt', 'DESC']],
-          limit: 1,
-          include: [
-            {
-              model: Users,
-              as: 'sender', // Вказати псевдонім
-              attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
-            },
-          ],
-        },
-      ],
-    });
-
-    res.send({
-      message,
-      preview: Object.assign(preview, { interlocutor: req.body.interlocutor }),
-      updatedConversation,
-    });
+    res.send({ message, preview });
   } catch (err) {
-    console.error(err); // Додано логування помилок
     next(err);
   }
 };
