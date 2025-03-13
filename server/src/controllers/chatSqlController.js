@@ -7,6 +7,7 @@ const sequelize = require('../models').sequelize; // Додано імпорт s
 module.exports.getPreviewSql = async (req, res, next) => {
   try {
     const userId = req.tokenData.userId;
+    console.log('Fetching conversations for user:', userId);
 
     // Отримати всі розмови, в яких бере участь користувач
     const conversations = await Conversation.findAll({
@@ -18,6 +19,8 @@ module.exports.getPreviewSql = async (req, res, next) => {
       order: [['updatedAt', 'DESC']],
     });
 
+    console.log('Fetched conversations:', conversations.length);
+
     // Отримати останнє повідомлення для кожної розмови
     const conversationIds = conversations.map(conversation => conversation.id);
     const lastMessages = await Message.findAll({
@@ -28,6 +31,8 @@ module.exports.getPreviewSql = async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
+
+    console.log('Fetched last messages:', lastMessages.length);
 
     // Отримати всіх співрозмовників
     const interlocutors = [];
@@ -47,6 +52,8 @@ module.exports.getPreviewSql = async (req, res, next) => {
       attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
     });
 
+    console.log('Fetched senders:', senders.length);
+
     // Додати інформацію про співрозмовників та останні повідомлення до розмов
     const conversationPreviews = conversations.map((conversation) => {
       const otherParticipant = conversation.participants.find(
@@ -58,6 +65,9 @@ module.exports.getPreviewSql = async (req, res, next) => {
       const lastMessage = lastMessages.find(
         (message) => message.conversationId === conversation.id
       );
+
+      console.log('Processing conversation:', conversation.id);
+      console.log('Last message for conversation:', lastMessage ? lastMessage.body : 'No last message');
 
       return {
         id: conversation.id,
@@ -78,6 +88,7 @@ module.exports.getPreviewSql = async (req, res, next) => {
 
     res.send(conversationPreviews);
   } catch (err) {
+    console.error('Error in getPreviewSql:', err);
     next(err);
   }
 };

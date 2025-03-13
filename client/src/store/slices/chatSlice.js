@@ -75,8 +75,10 @@ const getDialogMessagesExtraReducers = createExtraReducers({
 //---------- sendMessage
 export const sendMessage = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/sendMessage`,
-  thunk: async payload => {
+  thunk: async (payload, { dispatch }) => {
     const { data } = await restController.newMessage(payload);
+    // Після успішного відправлення повідомлення, викликаємо getPreviewChat для оновлення списку діалогів
+    await dispatch(getPreviewChat());
     return data;
   },
 });
