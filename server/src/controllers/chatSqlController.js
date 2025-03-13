@@ -16,15 +16,17 @@ module.exports.getPreviewSql = async (req, res, next) => {
         },
       },
       order: [['updatedAt', 'DESC']],
-      include: [
-        {
-          model: Message,
-          as: 'messages',
-          attributes: ['body', 'createdAt'],
-          order: [['createdAt', 'DESC']],
-          limit: 1,
+    });
+
+    // Отримати останнє повідомлення для кожної розмови
+    const conversationIds = conversations.map(conversation => conversation.id);
+    const lastMessages = await Message.findAll({
+      where: {
+        conversationId: {
+          [Op.in]: conversationIds,
         },
-      ],
+      },
+      order: [['createdAt', 'DESC']],
     });
 
     // Отримати всіх співрозмовників
@@ -53,7 +55,9 @@ module.exports.getPreviewSql = async (req, res, next) => {
       const sender = senders.find(
         (sender) => sender.id === otherParticipant
       );
-      const lastMessage = conversation.messages[0];
+      const lastMessage = lastMessages.find(
+        (message) => message.conversationId === conversation.id
+      );
 
       return {
         id: conversation.id,
@@ -83,55 +87,67 @@ module.exports.addMessageSql = async (req, res, next) => {
   participants.sort((participant1, participant2) => participant1 - participant2);
 
   try {
-    // Знайти або створити нову розмову
-    let [newConversation, created] = await Conversation.findOrCreate({
+    // Знайти розмову з цими учасниками
+    let conversation = await Conversation.findOne({
       where: {
         participants: {
           [Op.contains]: participants,
         },
       },
-      defaults: {
+    });
+    
+    // Якщо розмова не знайдена, створити нову
+    if (!conversation) {
+
+      conversation = await Conversation.create({
         participants,
         blackList: [false, false],
         favoriteList: [false, false],
-      },
-    });
-
-    // Перевірити, чи існує розмова
-    if (!created) {
+      });
+    } else {
       // Якщо розмова існує, оновити дату оновлення
-      await newConversation.update({ updatedAt: new Date() });
+      await conversation.update({ updatedAt: new Date() });
     }
 
     // Створити нове повідомлення
     const message = await Message.create({
       senderId: req.tokenData.userId,
       body: req.body.messageBody,
-      conversationId: newConversation.id,
+      conversationId: conversation.id,
+    });
+
+    // Оновити останнє повідомлення та дату створення в розмові
+    await conversation.update({
+      lastMessage: message.body,
+      lastMessageCreatedAt: message.createdAt,
     });
 
     const interlocutorId = participants.find(participant => participant !== req.tokenData.userId);
 
     const preview = {
-      id: newConversation.id,
+      id: conversation.id,
       sender: req.tokenData.userId,
       text: req.body.messageBody,
       createAt: message.createdAt,
       participants,
-      blackList: newConversation.blackList,
-      favoriteList: newConversation.favoriteList,
+      blackList: conversation.blackList,
+      favoriteList: conversation.favoriteList,
+      lastMessage: message.body,
+      lastMessageCreatedAt: message.createdAt,
     };
 
     controller.getChatController().emitNewMessage(interlocutorId, {
       message,
       preview: {
-        id: newConversation.id,
+        id: conversation.id,
         sender: req.tokenData.userId,
         text: req.body.messageBody,
         createAt: message.createdAt,
         participants,
-        blackList: newConversation.blackList,
-        favoriteList: newConversation.favoriteList,
+        blackList: conversation.blackList,
+        favoriteList: conversation.favoriteList,
+        lastMessage: message.body,
+        lastMessageCreatedAt: message.createdAt,
         interlocutor: {
           id: req.tokenData.userId,
           firstName: req.tokenData.firstName,
@@ -143,9 +159,32 @@ module.exports.addMessageSql = async (req, res, next) => {
       },
     });
 
+    // Отримати оновлені дані розмови
+    const updatedConversation = await Conversation.findOne({
+      where: {
+        id: conversation.id,
+      },
+      include: [
+        {
+          model: Message,
+          as: 'messages', // Вказати псевдонім
+          order: [['createdAt', 'DESC']],
+          limit: 1,
+          include: [
+            {
+              model: Users,
+              as: 'sender', // Вказати псевдонім
+              attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
+            },
+          ],
+        },
+      ],
+    });
+
     res.send({
       message,
       preview: Object.assign(preview, { interlocutor: req.body.interlocutor }),
+      updatedConversation,
     });
   } catch (err) {
     console.error(err); // Додано логування помилок

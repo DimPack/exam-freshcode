@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import CONSTANTS from '../../../../constants';
@@ -12,6 +12,8 @@ import DialogBox from '../DialogBox/DialogBox';
 import styles from './DialogList.module.sass';
 
 const DialogList = (props) => {
+  const chatContainerRef = useRef(null);
+
   const changeFavorite = (data, event) => {
     props.changeChatFavorite(data);
     event.stopPropagation();
@@ -51,24 +53,30 @@ const DialogList = (props) => {
       removeChat,
       interlocutor,
     } = props;
+
     preview.forEach((chatPreview, index) => {
+      const isUserMessage = chatPreview.id === userId;
       const dialogNode = (
-        <DialogBox
-          interlocutor={chatPreview.interlocutor}
-          chatPreview={chatPreview}
-          userId={userId}
-          key={index}
-          getTimeStr={getTimeStr}
-          changeFavorite={changeFavorite}
-          changeBlackList={changeBlackList}
-          chatMode={chatMode}
-          catalogOperation={
-            chatMode === CONSTANTS.CATALOG_PREVIEW_CHAT_MODE
-              ? removeChat
-              : changeShowCatalogCreation
-          }
-          goToExpandedDialog={goToExpandedDialog}
-        />
+        <div
+          key={`${chatPreview.id}-${index}`}
+          className={isUserMessage ? styles.userMessage : styles.otherMessage}
+        >
+          <DialogBox
+            interlocutor={chatPreview.interlocutor}
+            chatPreview={chatPreview}
+            userId={userId}
+            getTimeStr={getTimeStr}
+            changeFavorite={changeFavorite}
+            changeBlackList={changeBlackList}
+            chatMode={chatMode}
+            catalogOperation={
+              chatMode === CONSTANTS.CATALOG_PREVIEW_CHAT_MODE
+                ? removeChat
+                : changeShowCatalogCreation
+            }
+            goToExpandedDialog={goToExpandedDialog}
+          />
+        </div>
       );
       if (filterFunc && filterFunc(chatPreview, userId)) {
         arrayList.push(dialogNode);
@@ -92,7 +100,17 @@ const DialogList = (props) => {
     return renderPreview();
   };
 
-  return <div className={styles.previewContainer}>{renderChatPreview()}</div>;
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [props.preview]);
+
+  return (
+    <div className={styles.previewContainer} ref={chatContainerRef}>
+      {renderChatPreview()}
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => state.chatStore;

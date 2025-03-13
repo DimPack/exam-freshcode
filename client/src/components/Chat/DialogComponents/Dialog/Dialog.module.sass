@@ -1,11 +1,4 @@
-.messageBlock
-  display: inline-block
-  color: red
-  width: 100%
-  text-align: center
-
-
-.messageList
+.messageList 
   height: 280px
   overflow: auto
   padding: 0 8px
@@ -22,59 +15,78 @@
   &::-webkit-scrollbar-thumb
     background: #6b89b0
 
-  .date
-    align-self: center
-    margin: 4px 0
+.date
+  align-self: center
+  margin: 4px 0
+  color: white
+  background-color: black
+  opacity: 0.4
+  border-radius: 6px
+  padding: 2px
+
+.ownMessage
+  align-self: flex-start
+  color: white
+  max-width: 200px
+  padding: 6px
+  background-color: #6b89b0
+  border-bottom-left-radius: 8px
+  border-top-left-radius: 8px
+  border-top-right-radius: 4px
+  border-bottom-right-radius: 8px
+  margin: 4px 0
+  overflow-wrap: break-word
+  box-sizing: border-box
+
+  .messageTime
+    position: relative
+    float: right
+    margin-left: 5px
+    font-size: 10px
     color: white
-    background-color: black
-    opacity: 0.4
-    border-radius: 6px
-    padding: 2px
 
+.message
+  align-self: flex-start
+  color: white
+  max-width: 200px
+  background-color: #4e618d
+  border-bottom-left-radius: 8px
+  border-top-left-radius: 4px
+  border-top-right-radius: 8px
+  border-bottom-right-radius: 8px
+  margin: 4px 0
+  padding: 6px
+  overflow-wrap: break-word
+  box-sizing: border-box
 
-  .ownMessage
-    align-self: flex-end
+  .messageTime
+    position: relative
+    float: right
+    margin-left: 5px
+    top: 12px
+    font-size: 10px
     color: white
-    max-width: 200px
-    padding: 6px
-    background-color: #6b89b0
-    border-bottom-left-radius: 8px
-    border-top-left-radius: 8px
-    border-top-right-radius: 4px
-    border-bottom-right-radius: 8px
-    margin: 4px 0
-    overflow-wrap: break-word
-    box-sizing: border-box
 
-    .messageTime
-      position: relative
-      float: right
-      margin-left: 5px
-      top: 12px
-      font-size: 10px
-      color: white
+.interlocutorMessage
+  display: flex
+  flex-direction: column
+  align-self: flex-end
+  background-color: #f1f0f0
+  padding: 10px
+  border-radius: 10px
+  margin: 5px 0
 
+.messageTime
+  font-size: 10px
+  color: #888
+  margin-top: 10px
 
-  .message
-    align-self: flex-start
-    color: white
-    max-width: 200px
-    background-color: #4e618d
-    border-bottom-left-radius: 8px
-    border-top-left-radius: 4px
-    border-top-right-radius: 8px
-    border-bottom-right-radius: 8px
-    margin: 4px 0
-    padding: 6px
-    overflow-wrap: break-word
-    box-sizing: border-box
+.date
+  text-align: center
+  margin: 10px 0
+  font-weight: bold
 
-    .messageTime
-      position: relative
-      float: right
-      margin-left: 5px
-      top: 12px
-      font-size: 10px
-      color: white
-
-
+.messageBlock
+  text-align: center
+  color: red
+  font-weight: bold

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import styles from './DialogBox.module.sass';
 import CONSTANTS from '../../../../constants';
@@ -21,12 +21,16 @@ const DialogBox = props => {
     participants,
     blackList,
     _id,
-    text,
-    createAt,
+    lastMessage,
+    lastMessageCreatedAt,
   } = chatPreview;
 
   const isFavorite = favoriteList[participants.indexOf(userId)];
   const isBlocked = blackList[participants.indexOf(userId)];
+
+  useEffect(() => {
+    // Виконуйте будь-які дії при оновленні пропсів
+  }, [chatPreview, interlocutor]);
 
   if (!interlocutor) {
     return null; 
@@ -60,10 +64,10 @@ const DialogBox = props => {
           <span className={styles.interlocutorName}>
             {interlocutor.firstName}
           </span>
-          <span className={styles.interlocutorMessage}>{text}</span>
+          <span className={styles.interlocutorMessage}>{lastMessage}</span>
         </div>
         <div className={styles.buttonsContainer}>
-          <span className={styles.time}>{getTimeStr(createAt)}</span>
+          <span className={styles.time}>{getTimeStr(lastMessageCreatedAt)}</span>
           <i
             onClick={event =>
               changeFavorite(

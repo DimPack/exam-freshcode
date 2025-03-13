@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       Message.belongsTo(models.User, {
         foreignKey: 'senderId',
         targetKey: 'id',
+        as: 'sender',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
@@ -13,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Message.belongsTo(models.Conversation, {
         foreignKey: 'conversationId',
         targetKey: 'id',
+        as: 'conversation',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
