@@ -37,7 +37,7 @@ router.get('/getPreview', getPreviewSql);
 router.post('/createCatalog', createCatalogSql);
 router.get('/getCatalogs', getCatalogsSql);
 router.patch('/addNewChatToCatalog', addNewChatToCatalogSql);
-router.patch('/updateNameCatalog', updateNameCatalogSql);
+router.patch('/updateNameCatalog/:id', updateNameCatalogSql);
 
 router.patch('/blackList', blackList);
 router.patch('/favorite', favoriteChat);

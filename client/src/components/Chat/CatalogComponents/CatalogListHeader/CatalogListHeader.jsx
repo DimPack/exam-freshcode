@@ -11,18 +11,22 @@ import FormInput from '../../../FormInput/FormInput';
 import Schems from '../../../../utils/validators/validationSchems';
 
 const CatalogListHeader = (props) => {
-  const changeCatalogName = (values) => {
+  const handleChangeCatalogName = (values) => {
     const { changeCatalogName, id } = props;
-    console.log(props.id);
-    
-    changeCatalogName({ catalogName: values.catalogName, catalogId: id });
+    if (!id) {
+      return;
+    }
+  
+    changeCatalogName({ catalogId: id, catalogName: values.catalogName });
   };
+
   const {
     catalogName,
     changeShowModeCatalog,
     changeRenameCatalogMode,
     isRenameCatalog,
   } = props;
+
   return (
     <div className={styles.headerContainer}>
       <i
@@ -41,7 +45,7 @@ const CatalogListHeader = (props) => {
       {isRenameCatalog && (
         <div className={styles.changeContainer}>
           <Formik
-            onSubmit={changeCatalogName}
+            onSubmit={handleChangeCatalogName}
             initialValues={props.initialValues}
             validationSchema={Schems.CatalogSchema}
           >
@@ -67,10 +71,10 @@ const CatalogListHeader = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const { isRenameCatalog } = state.chatStore;
-  const { catalogName, _id } = state.chatStore.currentCatalog;
+  const { isRenameCatalog, currentCatalog } = state.chatStore;
+  const { catalogName, id } = currentCatalog || {};
   return {
-    _id,
+    id,
     catalogName,
     isRenameCatalog,
     initialValues: {

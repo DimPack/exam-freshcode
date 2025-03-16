@@ -47,7 +47,8 @@ export const addChatToCatalog = (data) => http.patch('/chats/addNewChatToCatalog
 export const createCatalog = (data) => http.post('/chats/createCatalog', data);
 export const deleteCatalog = (data) => http.patch('/chats/deleteCatalog', data);
 export const removeChatFromCatalog = (data) => http.patch('/chats/removeChatFromCatalog', data);
-export const changeCatalogName = (data) => http.patch('/chats/updateNameCatalog', data);
+export const changeCatalogName = (catalogId, data) => http.patch(`/chats/updateNameCatalog/${catalogId}`, data);
+
 export const getActiveContests = ({
   offset,
   limit,

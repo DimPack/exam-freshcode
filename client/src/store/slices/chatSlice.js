@@ -318,12 +318,8 @@ const removeChatFromCatalogExtraReducers = createExtraReducers({
 //---------- changeCatalogName
 export const changeCatalogName = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/changeCatalogName`,
-  thunk: async payload => {
-    // Логування наявності id у payload
-    console.log('Payload:', payload);
-    console.log('ID in payload:', payload.id);
-
-    const { data } = await restController.changeCatalogName(payload);
+  thunk: async ({ catalogId, catalogName }) => {
+    const { data } = await restController.changeCatalogName(catalogId, { catalogName }); 
     return data;
   },
 });

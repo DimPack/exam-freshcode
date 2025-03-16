@@ -254,15 +254,20 @@ module.exports.addNewChatToCatalogSql = async (req, res, next) => {
 
 module.exports.updateNameCatalogSql = async (req, res, next) => {
   try {
-    console.log(req.body);
-    
+    const { id } = req.params;
+
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ message: "Invalid catalog ID" });
+    }
+
     const catalog = await Catalog.findOne({
-      where: { id: req.body.catalogId, userId: req.tokenData.userId }
+      where: { id, userId: req.tokenData.userId }
     });
+
     if (!catalog) {
       return res.status(404).json({ message: 'Catalog not found or not authorized' });
     }
-    
+
     catalog.catalogName = req.body.catalogName;
     await catalog.save();
     res.send(catalog);
@@ -270,5 +275,8 @@ module.exports.updateNameCatalogSql = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
 
 
