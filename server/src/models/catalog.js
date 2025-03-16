@@ -51,12 +51,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         validate: {
-          notEmpty: {
-            msg: 'Chats array cannot be empty',
-          },
           isArray(value) {
             if (!Array.isArray(value)) {
               throw new Error('Chats must be an array of integers');
+            }
+            if (value.length === 0) {
+              throw new Error('Chats array cannot be empty');
             }
           },
         },

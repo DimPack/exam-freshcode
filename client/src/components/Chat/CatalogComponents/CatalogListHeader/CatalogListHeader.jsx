@@ -12,8 +12,10 @@ import Schems from '../../../../utils/validators/validationSchems';
 
 const CatalogListHeader = (props) => {
   const changeCatalogName = (values) => {
-    const { changeCatalogName, _id } = props;
-    changeCatalogName({ catalogName: values.catalogName, catalogId: _id });
+    const { changeCatalogName, id } = props;
+    console.log(props.id);
+    
+    changeCatalogName({ catalogName: values.catalogName, catalogId: id });
   };
   const {
     catalogName,

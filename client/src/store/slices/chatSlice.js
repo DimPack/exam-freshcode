@@ -50,6 +50,37 @@ const getPreviewChatExtraReducers = createExtraReducers({
   },
 });
 
+//---------- addNewChatToCatalog
+export const addNewChatToCatalog = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/addNewChatToCatalog`,
+  thunk: async payload => {
+    const { data } = await restController.addNewChatToCatalog({
+      catalogId: payload.catalogId,
+      chatId: [payload.chatId], // Передаємо масив з одним елементом
+    });
+    return data;
+  },
+});
+
+const addNewChatToCatalogExtraReducers = createExtraReducers({
+  thunk: addNewChatToCatalog,
+  fulfilledReducer: (state, { payload }) => {
+    const { catalogList } = state;
+    for (let i = 0; i < catalogList.length; i++) {
+      if (catalogList[i].id === payload.id) {
+        catalogList[i].chats = payload.chats;
+        break;
+      }
+    }
+    state.isShowCatalogCreation = false;
+    state.catalogList = [...catalogList];
+  },
+  rejectedReducer: (state, { payload }) => {
+    state.error = payload;
+    state.isShowCatalogCreation = false;
+  },
+});
+
 //---------- getDialogMessages
 export const getDialogMessages = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/getDialogMessages`,
@@ -77,7 +108,6 @@ export const sendMessage = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/sendMessage`,
   thunk: async (payload, { dispatch }) => {
     const { data } = await restController.newMessage(payload);
-    // Після успішного відправлення повідомлення, викликаємо getPreviewChat для оновлення списку діалогів
     await dispatch(getPreviewChat());
     return data;
   },
@@ -214,7 +244,10 @@ const addChatToCatalogExtraReducers = createExtraReducers({
 export const createCatalog = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/createCatalog`,
   thunk: async payload => {
-    const { data } = await restController.createCatalog(payload);
+    const { data } = await restController.createCatalog({
+      catalogName: payload.catalogName,
+      chatId: [payload.chatId], 
+    });
     return data;
   },
 });
@@ -286,22 +319,22 @@ const removeChatFromCatalogExtraReducers = createExtraReducers({
 export const changeCatalogName = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/changeCatalogName`,
   thunk: async payload => {
+    // Логування наявності id у payload
+    console.log('Payload:', payload);
+    console.log('ID in payload:', payload.id);
+
     const { data } = await restController.changeCatalogName(payload);
     return data;
   },
 });
 
+
 const changeCatalogNameExtraReducers = createExtraReducers({
   thunk: changeCatalogName,
   fulfilledReducer: (state, { payload }) => {
-    const { catalogList } = state;
-    for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
-        catalogList[i].catalogName = payload.catalogName;
-        break;
-      }
-    }
-    state.catalogList = [...catalogList];
+    state.catalogList = state.catalogList.map(catalog => 
+      catalog.id === payload.id ? { ...catalog, catalogName: payload.catalogName } : catalog
+    );
     state.currentCatalog = payload;
     state.isRenameCatalog = false;
   },
@@ -309,6 +342,8 @@ const changeCatalogNameExtraReducers = createExtraReducers({
     state.isRenameCatalog = false;
   },
 });
+
+
 //-------------------------------------------------------
 
 const reducers = {
@@ -402,6 +437,7 @@ const extraReducers = builder => {
   deleteCatalogExtraReducers(builder);
   removeChatFromCatalogExtraReducers(builder);
   changeCatalogNameExtraReducers(builder);
+  addNewChatToCatalogExtraReducers(builder);
 };
 
 const chatSlice = createSlice({

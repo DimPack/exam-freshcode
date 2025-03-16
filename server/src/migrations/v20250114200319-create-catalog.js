@@ -31,6 +31,7 @@ module.exports = {
       chats: {
         allowNull: false,
         type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: Sequelize.literal('ARRAY[]::INTEGER[]'),
       },
       createdAt: {
         field: 'created_at',

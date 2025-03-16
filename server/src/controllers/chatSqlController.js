@@ -1,15 +1,12 @@
 const db = require('../models');
 const controller = require('../socketInit');
 const { Op, Sequelize } = require('sequelize');
-const { Conversation, Message, Users } = require('../models');
-const sequelize = require('../models').sequelize; // Додано імпорт sequelize
+const { Conversation, Message, Users, Catalog } = require('../models');
+const sequelize = require('../models').sequelize;
 
 module.exports.getPreviewSql = async (req, res, next) => {
   try {
     const userId = req.tokenData.userId;
-    console.log('Fetching conversations for user:', userId);
-
-    // Отримати всі розмови, в яких бере участь користувач
     const conversations = await Conversation.findAll({
       where: {
         participants: {
@@ -19,9 +16,6 @@ module.exports.getPreviewSql = async (req, res, next) => {
       order: [['updatedAt', 'DESC']],
     });
 
-    console.log('Fetched conversations:', conversations.length);
-
-    // Отримати останнє повідомлення для кожної розмови
     const conversationIds = conversations.map(conversation => conversation.id);
     const lastMessages = await Message.findAll({
       where: {
@@ -32,9 +26,6 @@ module.exports.getPreviewSql = async (req, res, next) => {
       order: [['createdAt', 'DESC']],
     });
 
-    console.log('Fetched last messages:', lastMessages.length);
-
-    // Отримати всіх співрозмовників
     const interlocutors = [];
     conversations.forEach((conversation) => {
       const otherParticipant = conversation.participants.find(
@@ -52,9 +43,6 @@ module.exports.getPreviewSql = async (req, res, next) => {
       attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
     });
 
-    console.log('Fetched senders:', senders.length);
-
-    // Додати інформацію про співрозмовників та останні повідомлення до розмов
     const conversationPreviews = conversations.map((conversation) => {
       const otherParticipant = conversation.participants.find(
         (participant) => participant !== userId
@@ -65,9 +53,6 @@ module.exports.getPreviewSql = async (req, res, next) => {
       const lastMessage = lastMessages.find(
         (message) => message.conversationId === conversation.id
       );
-
-      console.log('Processing conversation:', conversation.id);
-      console.log('Last message for conversation:', lastMessage ? lastMessage.body : 'No last message');
 
       return {
         id: conversation.id,
@@ -88,7 +73,6 @@ module.exports.getPreviewSql = async (req, res, next) => {
 
     res.send(conversationPreviews);
   } catch (err) {
-    console.error('Error in getPreviewSql:', err);
     next(err);
   }
 };
@@ -98,7 +82,7 @@ module.exports.addMessageSql = async (req, res, next) => {
   participants.sort((participant1, participant2) => participant1 - participant2);
 
   try {
-    // Знайти розмову з цими учасниками
+
     let conversation = await Conversation.findOne({
       where: {
         participants: {
@@ -107,7 +91,6 @@ module.exports.addMessageSql = async (req, res, next) => {
       },
     });
 
-    // Якщо розмова не знайдена, створити нову
     if (!conversation) {
       conversation = await Conversation.create({
         participants,
@@ -116,14 +99,12 @@ module.exports.addMessageSql = async (req, res, next) => {
       });
     }
 
-    // Створити нове повідомлення
     const message = await Message.create({
       senderId: req.tokenData.userId,
       body: req.body.messageBody,
       conversationId: conversation.id,
     });
 
-    // Оновити останнє повідомлення та дату створення в розмові
     await conversation.update({
       lastMessage: message.body,
       lastMessageCreatedAt: message.createdAt,
@@ -143,7 +124,6 @@ module.exports.addMessageSql = async (req, res, next) => {
       lastMessageCreatedAt: message.createdAt,
     };
 
-    // Відправка повідомлення через WebSocket
     controller.getChatController().emitNewMessage(interlocutorId, {
       message,
       preview: {
@@ -178,7 +158,7 @@ module.exports.getChatSql = async (req, res, next) => {
   participants.sort((participant1, participant2) => participant1 - participant2);
 
   try {
-    // Знайти розмову з цими учасниками
+
     const conversation = await Conversation.findOne({
       where: { participants },
     });
@@ -187,13 +167,11 @@ module.exports.getChatSql = async (req, res, next) => {
       return res.status(404).json({ message: 'Conversation not found' });
     }
 
-    // Отримати повідомлення для цієї розмови
     const messages = await Message.findAll({
       where: { conversationId: conversation.id },
       order: [['createdAt', 'ASC']],
     });
 
-    // Отримати інформацію про співрозмовника
     const interlocutor = await db.Users.findByPk(req.body.interlocutorId, {
       attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
     });
@@ -216,3 +194,81 @@ module.exports.getChatSql = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.createCatalogSql = async (req, res, next) => {
+  const { userId } = req.tokenData;
+  const { catalogName, chatId } = req.body;
+
+  if (!chatId || !Array.isArray(chatId) || chatId.length === 0) {
+    return res.status(400).send({ message: 'Chats array cannot be empty' });
+  }
+
+  try {
+    const catalog = await Catalog.create({
+      userId,
+      catalogName,
+      chats: chatId,
+    });
+    res.send(catalog);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.getCatalogsSql = async (req, res, next) => {
+  try {
+    const catalogs = await Catalog.findAll({
+      where: { userId: req.tokenData.userId },
+      attributes: ['id', 'catalogName', 'chats'],
+    });
+    res.send(catalogs);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.addNewChatToCatalogSql = async (req, res, next) => {
+  try {
+    const { catalogId, chatId } = req.body;
+    const { userId } = req.tokenData;
+
+    const catalog = await Catalog.findOne({ where: { id: catalogId, userId } });
+
+    if (!catalog) {
+      return res.status(404).json({ error: 'Catalog not found or not authorized' });
+    }
+
+    if (!chatId || !Array.isArray(chatId) || chatId.length === 0) {
+      return res.status(400).json({ error: 'Chats array cannot be empty' });
+    }
+
+    catalog.chats = [...catalog.chats, ...chatId];
+
+    await catalog.save();
+
+    res.send(catalog);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.updateNameCatalogSql = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    
+    const catalog = await Catalog.findOne({
+      where: { id: req.body.catalogId, userId: req.tokenData.userId }
+    });
+    if (!catalog) {
+      return res.status(404).json({ message: 'Catalog not found or not authorized' });
+    }
+    
+    catalog.catalogName = req.body.catalogName;
+    await catalog.save();
+    res.send(catalog);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
