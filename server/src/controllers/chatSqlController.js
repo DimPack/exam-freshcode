@@ -276,6 +276,28 @@ module.exports.updateNameCatalogSql = async (req, res, next) => {
   }
 };
 
+module.exports.deleteCatalogSql = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.tokenData;
+
+    if (!id || !userId) {
+      return res.status(400).json({ error: 'Invalid input data' });
+    }
+
+    const result = await Catalog.destroy({
+      where: { id: id, userId }
+    });
+
+    if (result === 0) {
+      return res.status(404).json({ error: 'Catalog not found or not authorized' });
+    }
+
+    res.status(200).json({ message: 'Catalog deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
 
 
 

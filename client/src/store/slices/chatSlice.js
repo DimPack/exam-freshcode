@@ -264,29 +264,8 @@ const createCatalogExtraReducers = createExtraReducers({
   },
 });
 
-//---------- deleteCatalog
-export const deleteCatalog = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/deleteCatalog`,
-  thunk: async payload => {
-    await restController.deleteCatalog(payload);
-    return payload;
-  },
-});
 
-const deleteCatalogExtraReducers = createExtraReducers({
-  thunk: deleteCatalog,
-  fulfilledReducer: (state, { payload }) => {
-    const { catalogList } = state;
-    const newCatalogList = remove(
-      catalogList,
-      catalog => payload.catalogId !== catalog._id
-    );
-    state.catalogList = [...newCatalogList];
-  },
-  rejectedReducer: (state, { payload }) => {
-    state.error = payload;
-  },
-});
+
 
 //---------- removeChatFromCatalog
 export const removeChatFromCatalog = decorateAsyncThunk({
@@ -336,6 +315,25 @@ const changeCatalogNameExtraReducers = createExtraReducers({
   },
   rejectedReducer: state => {
     state.isRenameCatalog = false;
+  },
+});
+
+//---------- deleteCatalog
+export const deleteCatalog = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/deleteCatalog`,
+  thunk: async (catalogId) => {
+    await restController.deleteCatalog(catalogId);
+    return catalogId;
+  },
+});
+
+const deleteCatalogExtraReducers = createExtraReducers({
+  thunk: deleteCatalog,
+  fulfilledReducer: (state, { payload }) => {
+    state.catalogList = state.catalogList.filter(catalog => catalog.id !== payload);
+  },
+  rejectedReducer: (state, { payload }) => {
+    state.error = payload;
   },
 });
 

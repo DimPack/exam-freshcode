@@ -14,9 +14,13 @@ const CatalogList = (props) => {
   };
 
   const deleteCatalog = (event, catalogId) => {
-    props.deleteCatalog({ catalogId });
+    if (!catalogId) {
+      return;
+    }
+    props.deleteCatalog(catalogId);
     event.stopPropagation();
   };
+  
 
   const getListCatalog = () => {
     const { catalogList } = props;
@@ -43,7 +47,7 @@ const CatalogList = (props) => {
 
 const mapDispatchToProps = (dispatch) => ({
   changeShowModeCatalog: (data) => dispatch(changeShowModeCatalog(data)),
-  deleteCatalog: (data) => dispatch(deleteCatalog(data)),
+  deleteCatalog: (catalogId) => dispatch(deleteCatalog(catalogId)),
 });
 
 export default connect(null, mapDispatchToProps)(CatalogList);

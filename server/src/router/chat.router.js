@@ -20,6 +20,7 @@ const {
   getCatalogsSql,
   addNewChatToCatalogSql,
   updateNameCatalogSql,
+  deleteCatalogSql,
 } = require('../controllers/chatSqlController');
 
 const router = Router();
@@ -30,6 +31,7 @@ const router = Router();
 // router.get('/getCatalogs', getCatalogs);
 // router.patch('/addNewChatToCatalog', addNewChatToCatalog);
 // router.patch('/updateNameCatalog', updateNameCatalog);
+// router.patch('/deleteCatalog', deleteCatalog);
 
 router.post('/getChat', getChatSql);
 router.post('/newMessage', addMessageSql);
@@ -38,10 +40,10 @@ router.post('/createCatalog', createCatalogSql);
 router.get('/getCatalogs', getCatalogsSql);
 router.patch('/addNewChatToCatalog', addNewChatToCatalogSql);
 router.patch('/updateNameCatalog/:id', updateNameCatalogSql);
+router.delete('/deleteCatalog/:id', deleteCatalogSql);
 
 router.patch('/blackList', blackList);
 router.patch('/favorite', favoriteChat);
 router.patch('/removeChatFromCatalog', removeChatFromCatalog);
-router.patch('/deleteCatalog', deleteCatalog);
 
 module.exports = router;
