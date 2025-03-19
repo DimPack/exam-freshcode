@@ -299,6 +299,71 @@ module.exports.deleteCatalogSql = async (req, res, next) => {
   }
 };
 
+module.exports.blackListSql = async (req, res, next) => {
+  try {
+    const { participants, blackListFlag } = req.body;
+    const userId = req.tokenData.userId;
+
+    const userIndex = participants.indexOf(userId);
+    if (userIndex === -1) {
+      return res.status(400).json({ error: 'User not found in participants list' });
+    }
+
+    const conversation = await Conversation.findOne({
+      where: { participants },
+    });
+
+    if (!conversation) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+
+    const updatedBlackList = [...conversation.blackList];
+    updatedBlackList[userIndex] = blackListFlag;
+
+    await conversation.update({ blackList: updatedBlackList });
+
+    res.json(conversation);
+    const interlocutorId = participants.find(participant => participant !== userId);
+    controller.getChatController().emitChangeBlockStatus(interlocutorId, conversation);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports.favoritesSql = async (req, res, next) => {
+  try {
+    const { participants, favoriteFlag } = req.body;
+    const userId = req.tokenData.userId;
+
+    const userIndex = participants.indexOf(userId);
+    if (userIndex === -1) {
+      return res.status(400).json({ error: 'User not found in participants list' });
+    }
+
+    const conversation = await Conversation.findOne({
+      where: { participants },
+    });
+
+    if (!conversation) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+
+    const updatedFavoriteList = [...conversation.favoriteList];
+    updatedFavoriteList[userIndex] = favoriteFlag;
+
+    await conversation.update({ favoriteList: updatedFavoriteList });
+
+    res.json(conversation);
+    const interlocutorId = participants.find(participant => participant !== userId);
+    controller.getChatController().emitChangeFavoriteStatus(interlocutorId, conversation);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 

@@ -29,6 +29,10 @@ class ChatController extends WebSocket{
     this.io.to(parseInt(target)).emit(CONSTANTS.CHANGE_BLOCK_STATUS,
       { message });
   }
+
+  emitChangeFavoriteStatus (target, message) {
+    this.io.to(parseInt(target)).emit(CONSTANTS.CHANGE_FAVORITE_STATUS, { message });
+  }
 }
 
 module.exports = ChatController;
