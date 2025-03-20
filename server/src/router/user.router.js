@@ -17,7 +17,7 @@ const { checkAuth } = require('../middlewares/checkToken');
 
 const router = Router();
 
-router.get('/getUser', checkAuth);
+router.get('/getUser', checkAuth, getUser);
 router.post('/changeMark', onlyForCustomer, changeMark);
 router.post('/cashout', onlyForCreative, cashout);
 router.post('/pay',

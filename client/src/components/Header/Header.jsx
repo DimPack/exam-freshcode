@@ -20,8 +20,7 @@ const Header = ({
 
   useEffect(() => {
     if (!data) {
-      getUser();
-    }
+      getUser().catch(() => {});    }
   }, [data, getUser]);
 
   useEffect(() => {

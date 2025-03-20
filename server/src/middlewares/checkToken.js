@@ -44,23 +44,23 @@ const userQueries = require('../controllers/queries/userQueries');
 
 module.exports.checkAuth = async (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
+
   if (!authorizationHeader) {
     req.user = null;
     return next();
   }
+
   try {
     const tokenData = jwt.verify(authorizationHeader, CONSTANTS.JWT_SECRET);
     const foundUser = await userQueries.findUser({ id: tokenData.userId });
-    res.send({
-      firstName: foundUser.firstName,
-      lastName: foundUser.lastName,
-      role: foundUser.role,
-      id: foundUser.id,
-      avatar: foundUser.avatar,
-      displayName: foundUser.displayName,
-      balance: foundUser.balance,
-      email: foundUser.email,
-    });
+
+    if (!foundUser) {
+      req.user = null;
+      return next();
+    }
+
+    req.user = foundUser; // Зберігаємо знайденого користувача в req.user
+    next(); // Передаємо керування наступному middleware
   } catch (err) {
     req.user = null;
     return next();
