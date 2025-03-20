@@ -37,7 +37,6 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
-// Define associations
 db['Contests'].belongsTo(db['Users'], {
   foreignKey: 'userId',
   sourceKey: 'id',
@@ -59,11 +58,11 @@ db['Ratings'].belongsTo(db['Offers'], { foreignKey: 'offerId', targetKey: 'id'})
 db['Users'].hasMany(db['Catalog'], { foreignKey: 'userId', targetKey: 'id',});
 db['Catalog'].belongsTo(db['Users'], { foreignKey: 'userId', targetKey: 'id' });
 
-db['Message'].belongsTo(db['Users'], { foreignKey: 'senderId', as: 'sender' }); // Вказати псевдонім
-db['Users'].hasMany(db['Message'], { foreignKey: 'senderId', as: 'messages' }); // Вказати псевдонім
+db['Message'].belongsTo(db['Users'], { foreignKey: 'senderId', as: 'sender' });
+db['Users'].hasMany(db['Message'], { foreignKey: 'senderId', as: 'messages' });
 
 db['Conversation'].hasMany(db['Message'], { foreignKey: 'conversationId', as: 'messages', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-db['Message'].belongsTo(db['Conversation'], { foreignKey: 'conversationId', as: 'conversation' }); // Вказати псевдонім
+db['Message'].belongsTo(db['Conversation'], { foreignKey: 'conversationId', as: 'conversation' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

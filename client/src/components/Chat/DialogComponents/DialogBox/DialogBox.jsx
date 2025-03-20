@@ -29,7 +29,6 @@ const DialogBox = props => {
   const isBlocked = blackList[participants.indexOf(userId)];
 
   useEffect(() => {
-    // Виконуйте будь-які дії при оновленні пропсів
   }, [chatPreview, interlocutor]);
 
   if (!interlocutor) {
@@ -44,7 +43,7 @@ const DialogBox = props => {
           interlocutor,
           conversationData: {
             participants,
-            _id,
+            id,
             blackList,
             favoriteList,
           },

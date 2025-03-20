@@ -28,8 +28,6 @@ const ModeratorPage = () => {
   if (error) return <p>Error: {error}</p>;
 
   const totalPages = offers.length === limit;
-  // const isNextPageAvailable = offers.length === limit;
-
   const textContext = cx(styles.creativeInfo, styles.textContest);
 
   const sortOffersByStatus = (offers) => {

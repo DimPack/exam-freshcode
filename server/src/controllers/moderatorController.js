@@ -42,7 +42,6 @@ module.exports.getAllOffers = async (req, res, next) => {
   }
 };
 
-
 module.exports.updateOfferStatus = async (req, res, next) => {
   try {      
     if (req.tokenData.role !== 'moderator') {

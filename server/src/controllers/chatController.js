@@ -276,7 +276,6 @@ module.exports.deleteCatalog = async (req, res, next) => {
   }
 };
 
-
 module.exports.getCatalogs = async (req, res, next) => {
   try {
     const catalogs = await Catalog.aggregate([

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-
 const logFilePath = path.join(__dirname, 'error.log');
 const logDirPath = path.join(__dirname, 'Log');
 

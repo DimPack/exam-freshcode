@@ -70,7 +70,6 @@ module.exports.getPreviewSql = async (req, res, next) => {
         } : null,
       };
     });
-
     res.send(conversationPreviews);
   } catch (err) {
     next(err);

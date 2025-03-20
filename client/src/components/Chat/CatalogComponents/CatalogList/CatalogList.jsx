@@ -20,11 +20,11 @@ const CatalogList = (props) => {
     props.deleteCatalog(catalogId);
     event.stopPropagation();
   };
-  
 
   const getListCatalog = () => {
     const { catalogList } = props;
     const elementList = [];
+    
     catalogList.forEach((catalog) => {
       elementList.push(
         <Catalog

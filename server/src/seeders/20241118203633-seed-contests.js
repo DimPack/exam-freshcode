@@ -3,11 +3,10 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     const contests = [];
-
-    // Функція для створення випадкової дати протягом 2024 року
+  
     const getRandomDateIn2024 = () => {
-      const start = new Date(2024, 0, 1); // Початок 2024 року
-      const end = new Date(2024, 11, 31); // Кінець 2024 року
+      const start = new Date(2024, 0, 1);
+      const end = new Date(2024, 11, 31);
       return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     };
 

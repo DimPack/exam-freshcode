@@ -4,107 +4,86 @@ module.exports = {
       {
         type: 'typeOfName',
         describe: 'Company',
-
       },
       {
         type: 'typeOfName',
         describe: 'Product',
-
       },
       {
         type: 'typeOfName',
         describe: 'Project',
-
       },
       {
         type: 'nameStyle',
         describe: 'Classic',
-
       },
       {
         type: 'nameStyle',
         describe: 'Fun',
-
       },
       {
         type: 'nameStyle',
         describe: 'Professional',
-
       },
       {
         type: 'nameStyle',
         describe: 'Descriptive',
-
       },
       {
         type: 'nameStyle',
         describe: 'Youthful',
-
       },
       {
         type: 'nameStyle',
         describe: 'Any',
-
       },
       {
         type: 'typeOfTagline',
         describe: 'Classic',
-
       },
       {
         type: 'typeOfTagline',
         describe: 'Fun',
-
       },
       {
         type: 'typeOfTagline',
         describe: 'Powerful',
-
       },
       {
         type: 'typeOfTagline',
         describe: 'Descriptive',
-
       },
       {
         type: 'typeOfTagline',
         describe: 'Modern',
-
       },
       {
         type: 'typeOfTagline',
         describe: 'Any',
-
       },
       {
         type: 'brandStyle',
         describe: 'Techy',
-
       },
       {
         type: 'brandStyle',
         describe: 'Fun',
-
       },
       {
         type: 'brandStyle',
         describe: 'Fancy',
-
       },
       {
         type: 'brandStyle',
         describe: 'Minimal',
-
       },
       {
         type: 'brandStyle',
         describe: 'Brick & Mortar',
-
       },
       {
         type: 'brandStyle',
         describe: 'Photo-based',
-
       },
       {
         type: 'industry',

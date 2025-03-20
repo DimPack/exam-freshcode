@@ -56,7 +56,7 @@ export const addNewChatToCatalog = decorateAsyncThunk({
   thunk: async payload => {
     const { data } = await restController.addNewChatToCatalog({
       catalogId: payload.catalogId,
-      chatId: [payload.chatId], // Передаємо масив з одним елементом
+      chatId: [payload.chatId],
     });
     return data;
   },
@@ -264,9 +264,6 @@ const createCatalogExtraReducers = createExtraReducers({
   },
 });
 
-
-
-
 //---------- removeChatFromCatalog
 export const removeChatFromCatalog = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/removeChatFromCatalog`,
@@ -303,7 +300,6 @@ export const changeCatalogName = decorateAsyncThunk({
   },
 });
 
-
 const changeCatalogNameExtraReducers = createExtraReducers({
   thunk: changeCatalogName,
   fulfilledReducer: (state, { payload }) => {
@@ -336,7 +332,6 @@ const deleteCatalogExtraReducers = createExtraReducers({
     state.error = payload;
   },
 });
-
 
 //-------------------------------------------------------
 

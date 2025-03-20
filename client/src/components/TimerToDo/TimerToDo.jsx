@@ -49,13 +49,11 @@ function Timer({ dateTime, onExpire }) {
     };
 
     if (!hasExpired) {
-      // Викликаємо функцію на початку
       calculateTimeLeft();
 
-      // Оновлюємо кожну секунду
       const interval = setInterval(calculateTimeLeft, 1000);
 
-      return () => clearInterval(interval);  // Очищаємо інтервал при виході з компонента
+      return () => clearInterval(interval);
     }
   }, [dateTime, hasExpired, onExpire]);
 

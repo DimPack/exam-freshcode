@@ -4,8 +4,6 @@ FROM "Users" u
 WHERE c."userId" = u.id
   AND u."role" = 'customer'
   AND c."createdAt" BETWEEN '2023-12-25' AND '2024-01-14';
-  
-
 
 -- test 
 -- SELECT *

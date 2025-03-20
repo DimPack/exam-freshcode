@@ -16,7 +16,6 @@ const CatalogListHeader = (props) => {
     if (!id) {
       return;
     }
-  
     changeCatalogName({ catalogId: id, catalogName: values.catalogName });
   };
 

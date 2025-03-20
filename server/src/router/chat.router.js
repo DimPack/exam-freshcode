@@ -36,6 +36,7 @@ const router = Router();
 // router.patch('/deleteCatalog', deleteCatalog);
 // router.patch('/blackList', blackList);
 // router.patch('/favorite', favoriteChat);
+// router.patch('/removeChatFromCatalog', removeChatFromCatalog);
 
 router.post('/getChat', getChatSql);
 router.post('/newMessage', addMessageSql);
@@ -47,8 +48,5 @@ router.patch('/updateNameCatalog/:id', updateNameCatalogSql);
 router.delete('/deleteCatalog/:id', deleteCatalogSql);
 router.patch('/blackList', blackListSql);
 router.patch('/favorite', favoritesSql);
-
-
-router.patch('/removeChatFromCatalog', removeChatFromCatalog);
 
 module.exports = router;

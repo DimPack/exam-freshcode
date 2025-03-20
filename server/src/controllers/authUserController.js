@@ -3,7 +3,6 @@ const CONSTANTS = require('../constants');
 const userQueries = require('./queries/userQueries');
 const NotUniqueEmail = require('../errors/NotUniqueEmail');
 
-
 module.exports.login = async (req, res, next) => {
   try {
     const foundUser = await userQueries.findUser({ email: req.body.email });

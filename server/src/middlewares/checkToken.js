@@ -3,45 +3,6 @@ const CONSTANTS = require('../constants');
 const TokenError = require('../errors/TokenError');
 const userQueries = require('../controllers/queries/userQueries');
 
-// module.exports.checkAuth = async (req, res, next) => {
-//   const authorizationHeader = req.headers.authorization;
-//   if (!authorizationHeader) {
-//     req.user = null;
-//     return next();
-//   }
-
-//   try {
-//     const token = authorizationHeader
-//     if (!token) {
-//       return next(new TokenError('Token is missing or malformed.'));
-//     }
-
-//     const tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
-    
-//     const foundUser = await userQueries.findUser({ id: tokenData.userId });
-//     if (!foundUser) {
-//       return next(new TokenError('User not found. (checkAuth)'));
-//     }
-
-//     req.user = {
-//       firstName: foundUser.firstName,
-//       lastName: foundUser.lastName,
-//       role: foundUser.role,
-//       id: foundUser.id,
-//       avatar: foundUser.avatar,
-//       displayName: foundUser.displayName,
-//       balance: foundUser.balance,
-//       email: foundUser.email,
-//     };
-
-//     next();
-//   } catch (err) {
-//     console.error('Error during token verification:', err);
-//     req.user = null;
-//     return next();
-//   }
-// };
-
 module.exports.checkAuth = async (req, res, next) => {
   const authorizationHeader = req.headers.authorization;
 
@@ -59,8 +20,8 @@ module.exports.checkAuth = async (req, res, next) => {
       return next();
     }
 
-    req.user = foundUser; // Зберігаємо знайденого користувача в req.user
-    next(); // Передаємо керування наступному middleware
+    req.user = foundUser;
+    next();
   } catch (err) {
     req.user = null;
     return next();

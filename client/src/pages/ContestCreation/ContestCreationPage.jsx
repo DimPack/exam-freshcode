@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styles from './ContestCreationPage.module.sass';
@@ -31,7 +31,11 @@ const ContestCreationPage = (props) => {
     }
   };
 
-  !props.bundleStore.bundle && navigate('/startContest', {replace: true});
+  useEffect(() => {
+    if (!props.bundleStore.bundle) {
+      navigate('/startContest', { replace: true });
+    }
+  }, [props.bundleStore.bundle, navigate]);
 
   return (
     <div>
