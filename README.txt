@@ -68,7 +68,7 @@
     - скріншоти з результати для 12 та 13 знаходяться в папці server/src/handlerError/
 
 14. В цьому завдані було створено роль модератора який може підтверджувати та редагувати завдання які створює Customer
-    - створив seeds з ролю moderator в кількості 5 чоловік ( email: moderator1@gmail.com, pass: passwordModerator1 ) для зміни модератора просто змінюєш цифру від 1 до 5
+    - створив seeds з ролю moderator ( email: moderator1@gmail.com, pass: passwordModerator1 )
     - створено сторінку ModeratorPage яка призначення для відображення оферів для модератора (знаходиться в папці client/src/pages/ModeratorPage/)
     - було реалізована пагінація для оферів
     - було реалізовано відправка листів на пошту creators при підтвердженні модератора. Реалізовано в контролері де змінюється статус офера в контролері (moderatorController.js). Сам файл nodemailer.js знаходиться в папці server/src/nodemailer/. Використовую налаштування smtp сервера з Ethereal.email
