@@ -1,12 +1,12 @@
-# version: '3'
+version: '3.8'
 services:
 
   front-react:
     build:
       context: ./client
-
     environment:
-      NODE_ENV: development
+      REACT_APP_NODE_ENV: development
+      REACT_APP_DOCKER_ENV: true
     depends_on:
       - server-dev
     volumes:
@@ -14,30 +14,25 @@ services:
       - /client/node_modules
     ports:
       - "5000:3000"
-      
+    networks:
+      - app-network
+
   server-dev:
     build:
       context: ./server
-
     environment:
       NODE_ENV: development
     ports:
       - "3000:3000"
     depends_on:
       - db-dev
-      - mongo-dev
     volumes:
       - ./var/www/html/images:/var/www/html/images
       - ./server:/server
       - /server/node_modules
-
-
-  mongo-dev:
-    image: mongo:6.0.11
-    ports:
-      - "12345:27017"
-
-
+    command: sh -c "until pg_isready -h db-dev -p 5432 -U postgres; do echo 'Waiting for database...'; sleep 2; done && npx sequelize db:migrate && npx sequelize db:seed:all && npm start"
+    networks:
+      - app-network
 
   db-dev:
     image: postgres:15.5-bullseye
@@ -47,6 +42,9 @@ services:
       - POSTGRES_DB=todo-dev
     ports:
       - "12346:5432"
+    networks:
+      - app-network
 
-volumes:
-  server-dev:
+networks:
+  app-network:
+    driver: bridge

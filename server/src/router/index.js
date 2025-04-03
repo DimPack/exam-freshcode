@@ -8,6 +8,10 @@ const { checkToken } = require('../middlewares/checkToken');
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+    res.send('Welcome to the API!');
+  });
+
 router.use(checkToken);
 router.use('/', authRouter);
 router.use('/users', userRouter);

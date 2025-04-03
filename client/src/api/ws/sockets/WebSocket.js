@@ -5,9 +5,7 @@ class WebSocket {
   constructor (dispatch, getState, room) {
     this.dispatch = dispatch;
     this.getState = getState;
-    this.socket = socketIoClient(`${CONSTANTS.BASE_URL}${room}`, {
-      origins: 'localhost:*',
-    });
+    this.socket = socketIoClient(`${CONSTANTS.BASE_URL}${room}`);
     this.listen();
   }
 

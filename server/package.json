@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^9.0.0",
     "express": "^4.16.3",

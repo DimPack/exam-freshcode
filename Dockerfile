@@ -1,5 +1,11 @@
-FROM scratch
-RUN mkdir -p /squadhelp/app
-WORKDIR /home/user/squadhelp
-ADD start-dev.sh /squadhelp
-CMD start-dev.sh
+ARG VERSION=lts-alpine
+
+FROM node:$VERSION
+WORKDIR /squadhelp
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN chmod +x ./start-dev.sh
+
+EXPOSE 3000
+CMD ["./start-dev.sh"]
