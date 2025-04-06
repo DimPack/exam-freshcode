@@ -11,11 +11,11 @@ docker compose --file docker-compose-dev.yaml up -d
 echo ""
 
 # Wait for the database to be ready
-echo "-----> Waiting for the database to be ready..."
-until docker exec -it exam-freshcode-db-dev-1 pg_isready -h db-dev -p 5432 -U postgres > /dev/null 2>&1; do
-  echo "Waiting for database to be ready..."
-  sleep 2
-done
+# echo "-----> Waiting for the database to be ready..."
+# until docker exec -it exam-freshcode-db-dev-1 pg_isready -h db-dev -p 5432 -U postgres > /dev/null 2>&1; do
+#   echo "Waiting for database to be ready..."
+#   sleep 2
+# done
 
 # Run Sequelize's migrations.
 echo "-----> Running application migrations"
