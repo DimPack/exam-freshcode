@@ -15,6 +15,10 @@ const initialState = {
 export const getUser = createAsyncThunk(
   `${USER_SLICE_NAME}/getUser`,
   async (navigate, { rejectWithValue }) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      return null;
+    }
     try {
       const { data } = await restController.getUser();
       controller.subscribe(data.id);

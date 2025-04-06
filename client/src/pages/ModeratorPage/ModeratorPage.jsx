@@ -27,8 +27,7 @@ const ModeratorPage = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const totalPages = offers.length === limit;
-  const textContext = cx(styles.creativeInfo, styles.textContest);
+  const totalPages = Math.ceil(totalOffers / limit);  const textContext = cx(styles.creativeInfo, styles.textContest);
 
   const sortOffersByStatus = (offers) => {
     const statusOrder = { pending: 1, rejected: 2, won: 3 };
