@@ -1,18 +1,15 @@
-UPDATE "Contests" c
-SET prize = c."prize" * 1.1
-FROM "Users" u
-WHERE c."userId" = u.id
-  AND u."role" = 'customer'
-  AND c."createdAt" BETWEEN '2023-12-25' AND '2024-01-14';
+UPDATE "Users"
+SET "balance" = "balance" + "cashback"."total_cashback"
+FROM (
+  SELECT
+    "userId",
+    SUM("prize") * 0.10 AS "total_cashback"
+  FROM "Contests"
+  WHERE "createdAt"::date BETWEEN '2024-12-25' AND '2025-01-14'
+  GROUP BY "userId"
+) AS "cashback"
+WHERE "Users"."id" = "cashback"."userId"
+  AND "Users"."role" = 'customer'
+  RETURNING *;
 
--- test 
--- SELECT *
--- FROM "Contests"
--- WHERE "createdAt" BETWEEN '2023-12-25' AND '2024-01-14'
--- ORDER BY "createdAt" DESC;
-
-
--- SELECT *
--- FROM "Contests"
--- ORDER BY "createdAt" DESC;
 
