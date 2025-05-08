@@ -6,4 +6,5 @@ WHERE "id" IN (
     WHERE "role" = 'creator'
     ORDER BY "rating" DESC
     LIMIT 3
-);
+)
+RETURNING *;
