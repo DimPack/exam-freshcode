@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const cron = require('node-cron');
+
 const logFilePath = path.join(__dirname, 'error.log');
 const logDirPath = path.join(__dirname, 'Log');
 
@@ -47,7 +49,7 @@ const copyLogsDaily = () => {
   });
 };
 
-setInterval(copyLogsDaily, 86400000);
+cron.schedule('0 0 * * *', copyLogsDaily);
 
 module.exports = (err, req, res, next) => {
   const logObject = {
