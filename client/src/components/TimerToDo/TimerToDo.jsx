@@ -97,7 +97,7 @@ function Timer({ dateTime, onExpire }) {
           </div>
         </div>
       )}
-      <div className={styles.dateEvent}>
+      {/* <div className={styles.dateEvent}>
         <div
           className={cx(styles.createdDate, { [styles.expire]: hasExpired })}
         >
@@ -116,7 +116,7 @@ function Timer({ dateTime, onExpire }) {
             {eventTime}
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

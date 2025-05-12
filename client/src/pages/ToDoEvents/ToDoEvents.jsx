@@ -4,7 +4,10 @@ import TodoList from '../../components/TodoList/TodoList';
 import styles from './ToDoEvents.module.sass';
 
 const ToDoEvents = ({ onCompletedEventsChange }) => {
-  const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState(() => {
+    const savedEvents = localStorage.getItem('events');
+    return savedEvents ? JSON.parse(savedEvents) : [];
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
 
@@ -67,6 +70,10 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
     }
   }, [completedEventsCount, onCompletedEventsChange]);
 
+    useEffect(() => {
+    localStorage.setItem('events', JSON.stringify(events));
+  }, [events]);
+  
   return (
     <div className={styles.mainTodo}>
       <TodoForm onAddEvent={addEvent} />
