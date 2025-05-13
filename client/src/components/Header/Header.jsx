@@ -24,7 +24,7 @@ const Header = ({
   }, [data, getUser]);
 
   useEffect(() => {
-    if (completedEventsCount > 0) {
+    if (completedEventsCount >= 0) {
       setIsShaking(true);
 
       bellSound.play().catch((error) => {
