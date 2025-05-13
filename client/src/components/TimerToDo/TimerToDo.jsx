@@ -5,22 +5,6 @@ import styles from './TimerToDo.module.sass';
 function Timer({ dateTime, onExpire }) {
   const [timeLeft, setTimeLeft] = useState({});
   const [hasExpired, setHasExpired] = useState(false);
-  const [createdDate] = useState(() => {
-    const now = new Date();
-    return {
-      date: now.toLocaleDateString('en-GB').replace(/\//g, '.'),
-      time: now.toLocaleTimeString('en-GB', { hour12: false }),
-    };
-  });
-
-  const formattedEventDate = new Date(dateTime);
-  const eventDate = formattedEventDate
-    .toLocaleDateString('en-GB')
-    .replace(/\//g, '.');
-
-  const eventTime = formattedEventDate.toLocaleTimeString('en-GB', {
-    hour12: false,
-  });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -97,26 +81,6 @@ function Timer({ dateTime, onExpire }) {
           </div>
         </div>
       )}
-      {/* <div className={styles.dateEvent}>
-        <div
-          className={cx(styles.createdDate, { [styles.expire]: hasExpired })}
-        >
-          <p className={cx(styles.timeData, { [styles.expire]: hasExpired })}>
-            {createdDate.date}
-          </p>
-          <p className={cx(styles.timeData, { [styles.expire]: hasExpired })}>
-            {createdDate.time}
-          </p>
-        </div>
-        <div className={cx(styles.endDate, { [styles.expire]: hasExpired })}>
-          <p className={cx(styles.timeData, { [styles.expire]: hasExpired })}>
-            {eventDate}
-          </p>
-          <p className={cx(styles.timeData, { [styles.expire]: hasExpired })}>
-            {eventTime}
-          </p>
-        </div>
-      </div> */}
     </div>
   );
 }
