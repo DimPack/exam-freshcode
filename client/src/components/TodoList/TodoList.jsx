@@ -11,8 +11,6 @@ function TodoList({
   isModalOpen,
   updateEventStatus,
 }) {
-  console.log('All events:', events);
-
   const [expiredTimers, setExpiredTimers] = useState({});
   const [progressValues, setProgressValues] = useState({});
 
