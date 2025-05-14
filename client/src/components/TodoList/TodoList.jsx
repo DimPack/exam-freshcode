@@ -75,36 +75,37 @@ function TodoList({
     return () => clearInterval(interval);
   }, [events, expiredTimers]);
 
-  const renderedEvents = useMemo(() => {
-    return events.map((event, index) => {
-      const progress = progressValues[event.id] !== undefined 
-        ? progressValues[event.id] 
-        : calculateProgress(event.startTime, event.dateTime);
-      const isExpired = event.expired || expiredTimers[event.id];
+const renderedEvents = useMemo(() => {
+  return events.map((event, index) => {
+    const progress = progressValues[event.id] !== undefined 
+      ? progressValues[event.id] 
+      : calculateProgress(event.startTime, event.dateTime);
+    const isExpired = event.expired || expiredTimers[event.id];
 
-      return (
-        <li
-          key={event.id}
-          className={`${styles.todoItem} ${isExpired ? styles.todoItemFinish : ''}`}
-        >
-          <p>{index + 1}.</p>
-          <h3 className={styles.todoTitle}>{event.title}</h3>
-          <TimerToDo
-            dateTime={event.dateTime}
-            onExpire={() => handleTimerExpiration(event.id)}
-          />
-          <div
-            className={styles.close}
-            onClick={() => openModal(event.id)}
-          ></div>
-          <div
-            className={styles.progressBar}
-            style={{ width: `${progress}%` }}
-          ></div>
-        </li>
-      );
-    });
-  }, [events, expiredTimers, progressValues, openModal]);
+    return (
+      <li
+        key={event.id}
+        className={`${styles.todoItem} ${isExpired ? styles.todoItemFinish : ''}`}
+      >
+        <p>{index + 1}.</p>
+        <h3 className={styles.todoTitle}>{event.title}</h3>
+        <TimerToDo
+          dateTime={event.dateTime}
+          onExpire={() => handleTimerExpiration(event.id)}
+          reminderMinutes={event.reminderMinutes} // Передаємо час попередження
+        />
+        <div
+          className={styles.close}
+          onClick={() => openModal(event.id)}
+        ></div>
+        <div
+          className={styles.progressBar}
+          style={{ width: `${progress}%` }}
+        ></div>
+      </li>
+    );
+  });
+}, [events, expiredTimers, progressValues, openModal]);
 
   return (
     <div className={styles.todoList}>

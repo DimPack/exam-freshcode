@@ -6,8 +6,19 @@ function TodoForm({ onAddEvent }) {
     title: '',
     date: '',
     time: '',
+    reminder: '', // Додаємо поле для нагадування
   });
   const [error, setError] = useState('');
+
+  // Опції для попередження
+  const reminderOptions = [
+    { value: '', label: 'not remind' },
+    { value: '1', label: '1 minute' },
+    { value: '5', label: '5 minute' },
+    { value: '10', label: '10 minute' },
+    { value: '30', label: '30 minute' },
+    { value: '60', label: '60 minute' },
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,9 +54,12 @@ function TodoForm({ onAddEvent }) {
     onAddEvent({
       title: formData.title,
       dateTime: formattedDate.toISOString(),
+      reminderMinutes: formData.reminder
+        ? parseInt(formData.reminder, 10)
+        : null, // Додаємо час попередження
     });
 
-    setFormData({ title: '', date: '', time: '' });
+    setFormData({ title: '', date: '', time: '', reminder: '' });
     setError('');
   };
 
@@ -62,23 +76,43 @@ function TodoForm({ onAddEvent }) {
         required
       />
       <div className={styles.dateAndTimeContainer}>
-        <input
-          className={styles.inputData}
-          type="date"
-          name="date"
-          value={formData.date.split('.').reverse().join('-') || ''}
-          onChange={handleChange}
-          required
-        />
-        
-        <input
-          className={styles.inputData}
-          type="time"
-          name="time"
-          value={formData.time}
-          onChange={handleChange}
-          required
-        />
+        <div className={styles.dateAndTime}>
+          <input
+            className={styles.inputData}
+            type="date"
+            name="date"
+            value={formData.date.split('.').reverse().join('-') || ''}
+            onChange={handleChange}
+            required
+          />
+
+          <div className={styles.timeAndReminder}>
+            <input
+              className={styles.inputData}
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              required
+            />
+
+            <div className={styles.selectContainer}>
+              <select
+                className={styles.reminderSelect}
+                name="reminder"
+                value={formData.reminder}
+                onChange={handleChange}
+              >
+                {reminderOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
         <button className={styles.addButton} type="submit"></button>
       </div>
 
