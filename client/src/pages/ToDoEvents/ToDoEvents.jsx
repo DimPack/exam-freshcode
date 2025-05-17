@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import TodoForm from '../../components/TodoForm/TodoForm';
 import TodoList from '../../components/TodoList/TodoList';
-import ReminderPopup from '../../components/TodoReminderPopup/TodoReminderPopup'; // Імпортуємо компонент
 import styles from './ToDoEvents.module.sass';
 
 const ToDoEvents = ({ onCompletedEventsChange }) => {
@@ -10,7 +9,7 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
       const savedEvents = localStorage.getItem('events');
       return savedEvents ? JSON.parse(savedEvents) : [];
     } catch (error) {
-      console.error('Error loading events from localStorage:', error);
+      console.error('Error loading events:', error);
       return [];
     }
   });
@@ -18,20 +17,11 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [completedEventsCount, setCompletedEventsCount] = useState(0);
-  
-  // Додаємо стан для відображення попередження
-  const [reminderPopup, setReminderPopup] = useState({
-    show: false,
-    event: null,
-    minutes: 0
-  });
 
-  // Зберігаємо події в локальне сховище
   useEffect(() => {
     localStorage.setItem('events', JSON.stringify(events));
   }, [events]);
 
-  // Рахуємо кількість завершених подій
   useEffect(() => {
     const count = events.filter(event => event.expired).length;
     setCompletedEventsCount(count);
@@ -42,44 +32,6 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
     
     localStorage.setItem('completedEventsCount', count.toString());
   }, [events, onCompletedEventsChange]);
-
-  // Додаємо перевірку нагадувань
-  useEffect(() => {
-    const checkReminders = () => {
-      const now = new Date();
-      
-      events.forEach(event => {
-        if (event.reminderMinutes && !event.expired && !event.reminderShown) {
-          const eventDate = new Date(event.dateTime);
-          const reminderDate = new Date(eventDate.getTime() - (event.reminderMinutes * 60 * 1000));
-          
-          // Якщо поточний час більше або рівний часу нагадування,
-          // але менший за час події, показуємо нагадування
-          if (now >= reminderDate && now < eventDate) {
-            // Перевіряємо, чи ще не показували це нагадування
-            setReminderPopup({
-              show: true,
-              event: event,
-              minutes: event.reminderMinutes
-            });
-            
-            // Позначаємо подію як таку, для якої вже показано нагадування
-            setEvents(prev => prev.map(e => 
-              e.id === event.id ? { ...e, reminderShown: true } : e
-            ));
-          }
-        }
-      });
-    };
-    
-    // Перевіряємо нагадування кожні 15 секунд
-    const interval = setInterval(checkReminders, 15000);
-    
-    // Також перевіряємо одразу при завантаженні
-    checkReminders();
-    
-    return () => clearInterval(interval);
-  }, [events]);
 
   const addEvent = (event) => {
     const eventDate = new Date(event.dateTime);
@@ -93,7 +45,7 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
       ...event,
       id: Date.now(),
       expired: false,
-      reminderShown: false, // Додаємо флаг, щоб відстежувати показані нагадування
+      reminderShown: false,
       startTime: new Date().toISOString()
     };
 
@@ -154,7 +106,6 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
     closeModal();
   };
   
-  // Функція для закриття попереднення
   const closeReminderPopup = () => {
     setReminderPopup({
       show: false,
@@ -174,15 +125,6 @@ const ToDoEvents = ({ onCompletedEventsChange }) => {
         isModalOpen={isModalOpen}
         updateEventStatus={updateEventStatus}
       />
-      
-      {/* Додаємо компонент попередження */}
-      {reminderPopup.show && reminderPopup.event && (
-        <ReminderPopup 
-          event={reminderPopup.event}
-          reminderMinutes={reminderPopup.minutes}
-          onClose={closeReminderPopup}
-        />
-      )}
     </div>
   );
 };

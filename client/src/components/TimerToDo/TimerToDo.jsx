@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import styles from './TimerToDo.module.sass';
 
-// Додайте імпорт іконки нагадування (потрібно буде додати таку іконку в проект)
-// або використовуйте Unicode символ 🔔
-
 function Timer({ dateTime, onExpire, reminderMinutes }) {
   const [timeLeft, setTimeLeft] = useState({});
   const [hasExpired, setHasExpired] = useState(false);
@@ -46,7 +43,6 @@ function Timer({ dateTime, onExpire, reminderMinutes }) {
 
   return (
     <div className={styles.timer}>
-      {/* Показуємо індикатор нагадування, якщо встановлено */}
       {reminderMinutes && (
         <div className={styles.reminderIndicator} title={`Reminder for ${reminderMinutes} minutes before the event`}>
           🔔 {reminderMinutes}м

@@ -14,134 +14,24 @@ const Header = ({
   completedEventsCount,
 }) => {
   const [isShaking, setIsShaking] = useState(false);
-  const [localCompletedCount, setLocalCompletedCount] = useState(0);
   const navigate = useNavigate();
-  const location = useLocation(); // Додано для відстеження змін маршруту
-  const bellSound = new Audio('/sounds/callBell.mp3');
-  // Додаємо useRef для відстеження останнього значення лічильника
-  const previousCountRef = useRef(0);
-  // Додаємо useRef для перевірки монтування компонента
-  const firstMountRef = useRef(true);
+  const previousCountRef = useRef(completedEventsCount);
 
-  // Завантаження кількості завершених подій при монтуванні компонента
   useEffect(() => {
-    try {
-      // Спочатку перевіряємо, чи є значення у localStorage
-      const storedCount = localStorage.getItem('completedEventsCount');
-      
-      if (storedCount !== null) {
-        // Якщо є збережене значення, використовуємо його
-        const count = parseInt(storedCount, 10);
-        setLocalCompletedCount(count);
-        // Також зберігаємо поточне значення у ref
-        previousCountRef.current = count;
-      } else {
-        // Якщо немає збереженого значення, розраховуємо на основі подій
-        const events = JSON.parse(localStorage.getItem('events')) || [];
-        const count = events.filter(event => event.expired).length;
-        setLocalCompletedCount(count);
-        previousCountRef.current = count;
-        localStorage.setItem('completedEventsCount', count.toString());
-      }
-    } catch (error) {
-      console.error('Error loading completed events count:', error);
+    if (completedEventsCount > previousCountRef.current) {
+      setIsShaking(true);
+      const bellSound = new Audio('/sounds/callBell.mp3');
+      bellSound.play().catch(() => {});
+      setTimeout(() => setIsShaking(false), 500);
     }
-  }, []);
-
-  // Оновлення локального стану, коли змінюється проп completedEventsCount
-  useEffect(() => {
-    if (completedEventsCount !== undefined) {
-      setLocalCompletedCount(completedEventsCount);
-      localStorage.setItem('completedEventsCount', completedEventsCount.toString());
-    }
+    previousCountRef.current = completedEventsCount;
   }, [completedEventsCount]);
-
-  // НОВЕ: Оновлення лічильника при зміні URL
-  useEffect(() => {
-    try {
-      const storedCount = localStorage.getItem('completedEventsCount');
-      if (storedCount !== null) {
-        const count = parseInt(storedCount, 10);
-        setLocalCompletedCount(count);
-      }
-    } catch (error) {
-      console.error('Error updating count after route change:', error);
-    }
-  }, [location.pathname]);
-
-  // Додаємо слухач для змін у localStorage від інших вкладок/компонентів
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'events') {
-        try {
-          const events = JSON.parse(e.newValue) || [];
-          const count = events.filter(event => event.expired).length;
-          setLocalCompletedCount(count);
-          localStorage.setItem('completedEventsCount', count.toString());
-        } catch (error) {
-          console.error('Error parsing events from storage:', error);
-        }
-      } else if (e.key === 'completedEventsCount') {
-        try {
-          const count = parseInt(e.newValue, 10);
-          if (!isNaN(count)) {
-            setLocalCompletedCount(count);
-          }
-        } catch (error) {
-          console.error('Error parsing completedEventsCount from storage:', error);
-        }
-      }
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
 
   useEffect(() => {
     if (!data) {
       getUser().catch(() => {});    
     }
   }, [data, getUser]);
-
-  // Ефект анімації дзвінка при зміні кількості завершених подій
-  useEffect(() => {
-    // Перевіряємо, чи це перше монтування компонента
-    if (firstMountRef.current) {
-      // При першому монтуванні просто зберігаємо значення без анімації
-      firstMountRef.current = false;
-      previousCountRef.current = localCompletedCount;
-      return;
-    }
-    
-    // Запускаємо анімацію тільки якщо кількість зросла
-    if (localCompletedCount > 0 && localCompletedCount > previousCountRef.current) {
-      console.log('Bell animation triggered!', {
-        previous: previousCountRef.current,
-        current: localCompletedCount
-      });
-      
-      setIsShaking(true);
-
-      bellSound.play().catch((error) => {
-        console.error('Error playing sound:', error);
-      });
-
-      const timeout = setTimeout(() => {
-        setIsShaking(false);
-      }, 500);
-
-      // Оновлюємо попереднє значення
-      previousCountRef.current = localCompletedCount;
-      
-      return () => clearTimeout(timeout);
-    }
-    
-    // Оновлюємо збережене значення навіть якщо не запускаємо анімацію
-    previousCountRef.current = localCompletedCount;
-  }, [localCompletedCount, bellSound]);
 
   const logOut = () => {
     const completedCount = localStorage.getItem('completedEventsCount');
@@ -158,7 +48,6 @@ const Header = ({
   };
 
   const toDoButtonHandler = () => {
-    localStorage.setItem('completedEventsCount', localCompletedCount.toString());
     navigate('/todo-events');
   };
 
@@ -261,7 +150,6 @@ const Header = ({
         </div>
       </div>
       <div className={styles.navContainer}>
-        {/* ЗМІНЕНО: Замінено <a href="/"> на <Link to="/"> */}
         <Link to="/">
           <img
             src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
@@ -432,7 +320,7 @@ const Header = ({
                       src={`${CONSTANTS.STATIC_ICONS_PATH}bell-ring.svg`}
                       alt="bell"
                     />
-                    <p>{localCompletedCount}</p>
+                    <p>{completedEventsCount}</p>
                   </div>
                 </button>
               </div>

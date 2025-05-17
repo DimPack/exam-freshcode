@@ -6,11 +6,10 @@ function TodoForm({ onAddEvent }) {
     title: '',
     date: '',
     time: '',
-    reminder: '', // Додаємо поле для нагадування
+    reminder: '',
   });
   const [error, setError] = useState('');
 
-  // Опції для попередження
   const reminderOptions = [
     { value: '', label: 'not remind' },
     { value: '1', label: '1 minute' },
@@ -56,7 +55,7 @@ function TodoForm({ onAddEvent }) {
       dateTime: formattedDate.toISOString(),
       reminderMinutes: formData.reminder
         ? parseInt(formData.reminder, 10)
-        : null, // Додаємо час попередження
+        : null,
     });
 
     setFormData({ title: '', date: '', time: '', reminder: '' });
