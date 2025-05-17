@@ -24,6 +24,9 @@ import HowItWorks from './pages/HowItWorks/HowItWorks';
 import ToDoEvents from './pages/ToDoEvents/ToDoEvents';
 import ModeratorPage from './pages/ModeratorPage/ModeratorPage';
 import ModeratorRouter from './components/Routes/ModeratorRouter/ModeratorRouter';
+import GlobalReminderPopup from './components/GlobalReminderPopup/GlobalReminderPopup';
+import ReminderChecker from './components/GlobalReminderPopup/ReminderChecker';
+import CompletedEventsWatcher from './components/CompletedEventsWatcher/CompletedEventsWatcher';
 
 const App = () => {
   const [completedEventsCount, setCompletedEventsCount] = useState(0);
@@ -34,6 +37,10 @@ const App = () => {
 
   return (
     <Router history={browserHistory}>
+      <ReminderChecker />
+      <GlobalReminderPopup />
+      <CompletedEventsWatcher onChange={handleCompletedEventsChange} />
+
       <ToastContainer
         position="top-center"
         autoClose={5000}
