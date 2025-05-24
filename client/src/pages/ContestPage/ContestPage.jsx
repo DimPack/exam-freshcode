@@ -13,6 +13,7 @@ import {
   changeContestViewMode,
   changeShowImage,
 } from '../../store/slices/contestByIdSlice';
+import Header from '../../components/Header/Header';
 import ContestSideBar from '../../components/ContestSideBar/ContestSideBar';
 import styles from './ContestPage.module.sass';
 import OfferBox from '../../components/OfferBox/OfferBox';
@@ -39,27 +40,35 @@ class ContestPage extends React.Component {
   };
 
   setOffersList = () => {
-    const { offers } = this.props.contestByIdStore;
-  
-    const pendingOffers = offers.filter(offer => offer.status === CONSTANTS.OFFER_STATUS_WON);
-
-    if (pendingOffers.length === 0) {
-      return <div className={styles.notFound}>There is no suggestion at this moment</div>;
+    const array = [];
+    // Only show offers with status 'visible' or 'won'
+    const offersToShow = this.props.contestByIdStore.offers.filter(
+      (offer) =>
+        offer.status === CONSTANTS.OFFER_STATUS_VISIBLE ||
+        offer.status === CONSTANTS.OFFER_STATUS_WON
+    );
+    for (let i = 0; i < offersToShow.length; i++) {
+      array.push(
+        <OfferBox
+          data={offersToShow[i]}
+          key={offersToShow[i].id}
+          needButtons={this.needButtons}
+          setOfferStatus={this.setOfferStatus}
+          contestType={this.props.contestByIdStore.contestData.contestType}
+          date={new Date()}
+        />
+      );
     }
-  
-    return pendingOffers.map(offer => (
-      <OfferBox
-        data={offer}
-        key={offer.id}
-        needButtons={this.needButtons}
-        setOfferStatus={this.setOfferStatus}
-        contestType={this.props.contestByIdStore.contestData.contestType}
-        date={new Date()}
-      />
-    ));
+    return array.length !== 0 ? (
+      array
+    ) : (
+      <div className={styles.notFound}>
+        There is no suggestion at this moment
+      </div>
+    );
   };
-  
 
+  // Замовник може приймати рішення тільки для 'visible' оферів
   needButtons = (offerStatus) => {
     const contestCreatorId = this.props.contestByIdStore.contestData.User.id;
     const userId = this.props.userStore.data.id;
@@ -67,7 +76,7 @@ class ContestPage extends React.Component {
     return (
       contestCreatorId === userId &&
       contestStatus === CONSTANTS.CONTEST_STATUS_ACTIVE &&
-      offerStatus === CONSTANTS.OFFER_STATUS_PENDING
+      offerStatus === CONSTANTS.OFFER_STATUS_VISIBLE
     );
   };
 
@@ -134,7 +143,6 @@ class ContestPage extends React.Component {
     } = contestByIdStore;
     return (
       <div>
-
         {/* <Chat/> */}
         {isShowOnFull && (
           <LightBox
@@ -202,7 +210,13 @@ class ContestPage extends React.Component {
             </div>
             <ContestSideBar
               contestData={contestData}
-              totalEntries={offers.length}
+              totalEntries={
+                offers.filter(
+                  (offer) =>
+                    offer.status === CONSTANTS.OFFER_STATUS_VISIBLE ||
+                    offer.status === CONSTANTS.OFFER_STATUS_WON
+                ).length
+              }
             />
           </div>
         )}
@@ -226,7 +240,4 @@ const mapDispatchToProps = (dispatch) => ({
   changeShowImage: (data) => dispatch(changeShowImage(data)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(ContestPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContestPage));

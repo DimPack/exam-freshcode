@@ -42,55 +42,98 @@ module.exports.getAllOffers = async (req, res, next) => {
   }
 };
 
-module.exports.updateOfferStatus = async (req, res, next) => {
-  try {      
-    if (req.tokenData.role !== 'moderator') {
-        return res.status(403).send('Access denied');
-    }
+// module.exports.updateOfferStatus = async (req, res, next) => {
+//   try {
+//     if (req.tokenData.role !== 'moderator') {
+//         return res.status(403).send('Access denied');
+//     }
 
-    const { offerId, status } = req.body;
+//     const { offerId, status } = req.body;
 
-    if (!["won", "rejected"].includes(status)) {
-        return res.status(400).send("Invalid status value");
-    }
+//     if (!["won", "rejected"].includes(status)) {
+//         return res.status(400).send("Invalid status value");
+//     }
 
-    const offer = await bd.Offers.findByPk(offerId, {
+//     const offer = await bd.Offers.findByPk(offerId, {
+//       include: [
+//         {
+//           model: bd.Users,
+//           attributes: ['email'],
+//         },
+//       ],
+//     });
+//     if (!offer) {
+//         return res.status(404).send("Offer not found");
+//     }
+
+//     offer.status = status;
+//     await offer.save();
+//     console.log(offer);
+
+//     const mailOptions = {
+//       to: offer.User.email,
+//       subject: 'Offer Status Updated',
+//       text: `The status of your offer has been updated to: ${status}`,
+//     };
+
+//     mailer.sendMail(mailOptions, (error, info) => {
+//       if (error) {
+//         console.error('Error sending email:', error);
+//       } else {
+//         console.log('Email sent:', info.response);
+//       }
+//     });
+
+//     res.status(200).send({
+//       message: "Offer status updated successfully",
+//       offer: offer
+//     });
+//   } catch (error) {
+//       next(error);
+//   }
+// };
+module.exports.makeOfferVisible = async (req, res, next) => {
+  try {
+    if (req.tokenData.role !== 'moderator')
+      return res.status(403).send('Access denied');
+    const { offerId } = req.body;
+    await bd.Offers.update({ status: 'visible' }, { where: { id: offerId } });
+    const updatedOffer = await bd.Offers.findOne({
+      where: { id: offerId },
       include: [
         {
           model: bd.Users,
-          attributes: ['email'],
+          attributes: ['id', 'firstName', 'lastName', 'email'],
+        },
+        {
+          model: bd.Contests,
+          attributes: ['id', 'title', 'userId'],
+          include: [
+            {
+              model: bd.Users,
+              attributes: ['id', 'firstName', 'lastName', 'email'],
+              required: true,
+            },
+          ],
         },
       ],
     });
-    if (!offer) {
-        return res.status(404).send("Offer not found");
-    }
-
-    offer.status = status;
-    await offer.save();
-    console.log(offer);
-    
-    const mailOptions = {
-      to: offer.User.email,
-      subject: 'Offer Status Updated',
-      text: `The status of your offer has been updated to: ${status}`,
-    };
-
-    mailer.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-      } else {
-        console.log('Email sent:', info.response);
-      }
-    });
-
-    res.status(200).send({
-      message: "Offer status updated successfully",
-      offer: offer
-    });
+    res.status(200).send({ offer: updatedOffer });
   } catch (error) {
-      next(error);
+    next(error);
   }
 };
 
-
+module.exports.deleteOffer = async (req, res, next) => {
+  try {
+    if (req.tokenData.role !== 'moderator')
+      return res.status(403).send('Access denied');
+    const { offerId } = req.body;
+    const offer = await bd.Offers.findByPk(offerId);
+    if (!offer) return res.status(404).send('Offer not found');
+    await offer.destroy();
+    res.status(200).send({ offerId });
+  } catch (error) {
+    next(error);
+  }
+};

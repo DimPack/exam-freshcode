@@ -4,6 +4,5 @@ import rejectedIcon from '/staticImages/icons/close.svg';
 
 export const statusIcons = {
   pending: pendingIcon,
-  won: wonIcon,
-  rejected: rejectedIcon,
+  visible: wonIcon,
 };

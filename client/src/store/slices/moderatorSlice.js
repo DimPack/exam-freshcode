@@ -3,6 +3,7 @@ import * as restController from '../../api/rest/restController';
 
 const MODERATOR_SLICE_NAME = 'moderator';
 
+// Отримати всі офери
 export const fetchAllOffers = createAsyncThunk(
   `${MODERATOR_SLICE_NAME}/fetchAllOffers`,
   async (params, { rejectWithValue }) => {
@@ -15,12 +16,26 @@ export const fetchAllOffers = createAsyncThunk(
   }
 );
 
-export const updateOfferStatus = createAsyncThunk(
-  `${MODERATOR_SLICE_NAME}/updateOfferStatus`,
-  async ({ offerId, status }, { rejectWithValue }) => {
+// Відобразити офер замовнику (змінити статус на visible)
+export const makeOfferVisible = createAsyncThunk(
+  `${MODERATOR_SLICE_NAME}/makeOfferVisible`,
+  async ({ offerId }, { rejectWithValue }) => {
     try {
-      const response = await restController.updateOfferStatus({ offerId, status });
+      const response = await restController.makeOfferVisible({ offerId });
       return response.data.offer;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// Видалити офер
+export const deleteOffer = createAsyncThunk(
+  `${MODERATOR_SLICE_NAME}/deleteOffer`,
+  async ({ offerId }, { rejectWithValue }) => {
+    try {
+      await restController.deleteOffer({ offerId });
+      return offerId;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
@@ -49,10 +64,11 @@ const moderatorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(updateOfferStatus.pending, (state) => {
+      // Додаємо makeOfferVisible
+      .addCase(makeOfferVisible.pending, (state) => {
         state.error = null;
       })
-      .addCase(updateOfferStatus.fulfilled, (state, action) => {
+      .addCase(makeOfferVisible.fulfilled, (state, action) => {
         state.loading = false;
         const updatedOffer = action.payload;
         const index = state.offers.findIndex((offer) => offer.id === updatedOffer.id);
@@ -60,7 +76,18 @@ const moderatorSlice = createSlice({
           state.offers[index] = updatedOffer;
         }
       })
-      .addCase(updateOfferStatus.rejected, (state, action) => {
+      .addCase(makeOfferVisible.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Додаємо deleteOffer
+      .addCase(deleteOffer.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(deleteOffer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.offers = state.offers.filter((offer) => offer.id !== action.payload);
+      })
+      .addCase(deleteOffer.rejected, (state, action) => {
         state.error = action.payload;
       });
   },

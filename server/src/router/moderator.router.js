@@ -1,10 +1,12 @@
 const { Router } = require('express');
-const { getAllOffers, updateOfferStatus } = require('../controllers/moderatorController');
+const { getAllOffers, makeOfferVisible, deleteOffer } = require('../controllers/moderatorController');
 const { paginate } = require('../middlewares/paginate.mw');
 
 const router = Router();
 
 router.get('/getAllOffers', paginate, getAllOffers);
-router.patch('/updateOfferStatus', updateOfferStatus);
+router.post('/makeOfferVisible', makeOfferVisible);
+router.post('/deleteOffer', deleteOffer)
+// router.patch('/updateOfferStatus', updateOfferStatus);
 
 module.exports = router;
