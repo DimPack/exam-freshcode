@@ -60,7 +60,7 @@ const ModeratorPage = () => {
         ) : (
           <ul className={styles.list}>
             {sortedOffers.map((offer) => {
-              console.log('OFFER:', offer); // <-- Логування кожного офера
+              console.log('OFFER:', offer);
               return (
                 <li key={offer.id} className={styles.item}>
                   <div className={styles.creativeInfo}>

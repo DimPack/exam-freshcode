@@ -14,6 +14,8 @@ export default {
   OFFER_STATUS_REJECTED: 'rejected',
   OFFER_STATUS_WON: 'won',
   OFFER_STATUS_PENDING: 'pending',
+  OFFER_STATUS_VISIBLE: 'visible',
+
   STATIC_ICONS_PATH: '/staticImages/icons/',
   STATIC_IMAGES_PATH: '/staticImages/',
   ANONYM_IMAGE_PATH: '/staticImages/anonym.png',
