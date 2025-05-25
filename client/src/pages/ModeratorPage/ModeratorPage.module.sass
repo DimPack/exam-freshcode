@@ -59,3 +59,83 @@
   flex-direction: column
   & .button
     padding: 5px 10px
+
+
+
+
+.modalOverlay
+  display: flex
+  align-items: center
+  justify-content: center
+  position: fixed
+  width: 100vw
+  height: 100vh
+  top: 0
+  left: 0
+  background: rgba(0,0,0,0.4)
+  z-index: 1000
+
+.modal  
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 20px
+  position: relative
+  min-width: 320px
+  max-width: 90vw
+  background: #fff
+  border-radius: 12px
+  padding: 32px 24px 24px 24px
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18)
+
+.closeBtn
+  position: absolute
+  top: 12px
+  right: 16px
+  background: none
+  border: none
+  font-size: 1.5rem
+  color: #888
+  cursor: pointer
+  transition: color 0.2s
+  &:hover
+    color: #e74c3c
+
+.modalTitle
+  margin: 0 0 12px 0
+  font-size: 1.25rem
+  font-weight: 600
+  color: #e74c3c
+
+.modalText
+  margin-bottom: 24px
+  color: #333
+  text-align: center
+
+.modalButtons
+  display: flex
+  gap: 16px
+
+.deleteBtn
+  background: #e74c3c
+  color: #fff
+  border: none
+  padding: 8px 20px
+  border-radius: 6px
+  font-weight: 500
+  cursor: pointer
+  transition: background 0.2s
+  &:hover
+    background: #c0392b
+
+.cancelBtn
+  background: #f3f3f3
+  color: #333
+  border: none
+  padding: 8px 20px
+  border-radius: 6px
+  font-weight: 500
+  cursor: pointer
+  transition: background 0.2s
+  &:hover
+    background: #e0e0e0

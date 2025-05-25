@@ -129,7 +129,6 @@ const ModeratorPage = () => {
         onPageChange={handlePageChange}
       />
 
-      {/* Modal for delete confirmation */}
       {offerToDelete && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
