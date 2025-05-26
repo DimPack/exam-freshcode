@@ -19,18 +19,6 @@ export const makeOfferVisible = (data) => {
 export const deleteOffer = (data) => {
   return http.post('/moderators/deleteOffer', data);
 };
-// export const updateOfferStatus = (data) => {
-//   return http.patch('/moderators/updateOfferStatus', data, {
-//     headers: {
-//       'Content-Type': 'application/json'
-//     }
-//   }).then(response => {
-//     return response;
-//   }).catch(error => {
-//     console.error('Error updating offer status:', error);
-//     throw error;
-//   });
-// };
 
 export const getUser = () => http.get('/users/getUser');
 export const payMent = (data) => http.post('/users/pay', data.formData);

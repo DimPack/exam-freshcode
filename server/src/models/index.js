@@ -3,16 +3,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const configPath =
-  env === 'production'
-    ? path.join(
-        __dirname,
-        '..',
-        '..',
-        '..',
-        'src/server/config/postgresConfig.json'
-      )
-    : path.join(__dirname, '..', '/config/postgresConfig.json');
+const configPath = path.join(__dirname, '..', 'config', 'postgresConfig.json');
 const config = require(configPath)[env];
 const db = {};
 
