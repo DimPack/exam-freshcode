@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import {
   changeShowModeCatalog,
@@ -10,34 +10,28 @@ import styles from './CatalogHeader.module.sass';
 import FormInput from '../../../FormInput/FormInput';
 import Schems from '../../../../utils/validators/validationSchems';
 
-const CatalogListHeader = (props) => {
-  const handleChangeCatalogName = (values) => {
-    const { changeCatalogName, id } = props;
-    if (!id) {
-      return;
-    }
-    changeCatalogName({ catalogId: id, catalogName: values.catalogName });
-  };
+const CatalogListHeader = () => {
+  const dispatch = useDispatch();
+  const { isRenameCatalog, currentCatalog } = useSelector((state) => state.chatStore);
+  const { catalogName, id } = currentCatalog || {};
 
-  const {
-    catalogName,
-    changeShowModeCatalog,
-    changeRenameCatalogMode,
-    isRenameCatalog,
-  } = props;
+  const handleChangeCatalogName = (values) => {
+    if (!id) return;
+    dispatch(changeCatalogName({ catalogId: id, catalogName: values.catalogName }));
+  };
 
   return (
     <div className={styles.headerContainer}>
       <i
         className="fas fa-long-arrow-alt-left"
-        onClick={() => changeShowModeCatalog()}
+        onClick={() => dispatch(changeShowModeCatalog())}
       />
       {!isRenameCatalog && (
         <div className={styles.infoContainer}>
           <span>{catalogName}</span>
           <i
             className="fas fa-edit"
-            onClick={() => changeRenameCatalogMode()}
+            onClick={() => dispatch(changeRenameCatalogMode())}
           />
         </div>
       )}
@@ -45,7 +39,7 @@ const CatalogListHeader = (props) => {
         <div className={styles.changeContainer}>
           <Formik
             onSubmit={handleChangeCatalogName}
-            initialValues={props.initialValues}
+            initialValues={{ catalogName }}
             validationSchema={Schems.CatalogSchema}
           >
             <Form>
@@ -69,23 +63,4 @@ const CatalogListHeader = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const { isRenameCatalog, currentCatalog } = state.chatStore;
-  const { catalogName, id } = currentCatalog || {};
-  return {
-    id,
-    catalogName,
-    isRenameCatalog,
-    initialValues: {
-      catalogName,
-    },
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  changeShowModeCatalog: () => dispatch(changeShowModeCatalog()),
-  changeRenameCatalogMode: () => dispatch(changeRenameCatalogMode()),
-  changeCatalogName: (data) => dispatch(changeCatalogName(data)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CatalogListHeader);
+export default CatalogListHeader;

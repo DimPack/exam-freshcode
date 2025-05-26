@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import {
   backToDialogList,
@@ -9,14 +9,18 @@ import {
 import styles from './ChatHeader.module.sass';
 import CONSTANTS from '../../../../constants';
 
-const ChatHeader = (props) => {
+const ChatHeader = ({ userId }) => {
+  const dispatch = useDispatch();
+  const interlocutor = useSelector((state) => state.chatStore.interlocutor);
+  const chatData = useSelector((state) => state.chatStore.chatData);
+
   const changeFavorite = (data, event) => {
-    props.changeChatFavorite(data);
+    dispatch(changeChatFavorite(data));
     event.stopPropagation();
   };
 
   const changeBlackList = (data, event) => {
-    props.changeChatBlock(data);
+    dispatch(changeChatBlock(data));
     event.stopPropagation();
   };
 
@@ -30,13 +34,13 @@ const ChatHeader = (props) => {
     return blackList[participants.indexOf(userId)];
   };
 
-  const { avatar, firstName } = props.interlocutor;
-  const { backToDialogList, chatData, userId } = props;
+  const { avatar, firstName } = interlocutor || {};
+
   return (
     <div className={styles.chatHeader}>
       <div
         className={styles.buttonContainer}
-        onClick={() => backToDialogList()}
+        onClick={() => dispatch(backToDialogList())}
       >
         <img
           src={`${CONSTANTS.STATIC_IMAGES_PATH}arrow-left-thick.png`}
@@ -94,15 +98,4 @@ const ChatHeader = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const { interlocutor, chatData } = state.chatStore;
-  return { interlocutor, chatData };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  backToDialogList: () => dispatch(backToDialogList()),
-  changeChatFavorite: (data) => dispatch(changeChatFavorite(data)),
-  changeChatBlock: (data) => dispatch(changeChatBlock(data)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);
+export default ChatHeader;

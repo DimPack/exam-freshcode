@@ -16,13 +16,9 @@ const PrivateRoute = (props) => {
   if (!data) {
     return <Navigate to="/login" />;
   }
-  // if (data.role === 'moderator') {
-  //   return <Navigate to="/moderator" />;
-  // }
 
   return data ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
 
-// https://chatgpt.com/c/67969f98-b7a0-800e-a890-4e9d5f7c8115

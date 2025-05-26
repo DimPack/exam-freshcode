@@ -1,53 +1,41 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Catalog from '../Catalog/Catalog';
 import styles from '../CatalogListContainer/CatalogListContainer.module.sass';
 import {
   changeShowModeCatalog,
-  deleteCatalog,
+  deleteCatalog as deleteCatalogAction,
 } from '../../../../store/slices/chatSlice';
 
-const CatalogList = (props) => {
+const CatalogList = ({ catalogList }) => {
+  const dispatch = useDispatch();
+
   const goToCatalog = (event, catalog) => {
-    props.changeShowModeCatalog(catalog);
+    dispatch(changeShowModeCatalog(catalog));
     event.stopPropagation();
   };
 
   const deleteCatalog = (event, catalogId) => {
-    if (!catalogId) {
-      return;
-    }
-    props.deleteCatalog(catalogId);
+    if (!catalogId) return;
+    dispatch(deleteCatalogAction(catalogId));
     event.stopPropagation();
   };
 
   const getListCatalog = () => {
-    const { catalogList } = props;
-    const elementList = [];
-    
-    catalogList.forEach((catalog) => {
-      elementList.push(
-        <Catalog
-          catalog={catalog}
-          key={catalog.id}
-          deleteCatalog={deleteCatalog}
-          goToCatalog={goToCatalog}
-        />
-      );
-    });
-    return elementList.length ? (
-      elementList
-    ) : (
-      <span className={styles.notFound}>Not found</span>
-    );
+    if (!catalogList || !catalogList.length) {
+      return <span className={styles.notFound}>Not found</span>;
+    }
+    return catalogList.map((catalog) => (
+      <Catalog
+        catalog={catalog}
+        key={catalog.id}
+        deleteCatalog={deleteCatalog}
+        goToCatalog={goToCatalog}
+      />
+    ));
   };
 
   return <div className={styles.listContainer}>{getListCatalog()}</div>;
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  changeShowModeCatalog: (data) => dispatch(changeShowModeCatalog(data)),
-  deleteCatalog: (catalogId) => dispatch(deleteCatalog(catalogId)),
-});
-
-export default connect(null, mapDispatchToProps)(CatalogList);
+export default CatalogList;

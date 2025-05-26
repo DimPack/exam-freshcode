@@ -1,47 +1,43 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styles from './ContestContainer.module.sass';
 import Spinner from '../Spinner/Spinner';
 
-class ContestsContainer extends React.Component {
-  componentDidMount () {
-    window.addEventListener('scroll', this.scrollHandler);
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('scroll', this.scrollHandler);
-  }
-
-  scrollHandler = () => {
+const ContestsContainer = ({ isFetching, haveMore, loadMore, children }) => {
+  const scrollHandler = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop ===
       document.documentElement.offsetHeight
     ) {
-      if (this.props.haveMore) {
-        const childrenCount = React.Children.toArray(this.props.children).length;
-        this.props.loadMore(childrenCount);
+      if (haveMore) {
+        const childrenCount = React.Children.toArray(children).length;
+        loadMore(childrenCount);
       }
     }
-  };
+  }, [haveMore, loadMore, children]);
 
-  render () {
-    const { isFetching } = this.props;
-    const childrenArray = React.Children.toArray(this.props.children);
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler);
+    return () => {
+      window.removeEventListener('scroll', scrollHandler);
+    };
+  }, [scrollHandler]);
 
-    if (!isFetching && childrenArray.length === 0) {
-      return <div className={styles.notFound}>Nothing found</div>;
-    }
+  const childrenArray = React.Children.toArray(children);
 
-    return (
-      <div>
-        {childrenArray}
-        {isFetching && (
-          <div className={styles.spinnerContainer}>
-            <Spinner />
-          </div>
-        )}
-      </div>
-    );
+  if (!isFetching && childrenArray.length === 0) {
+    return <div className={styles.notFound}>Nothing found</div>;
   }
-}
+
+  return (
+    <div>
+      {childrenArray}
+      {isFetching && (
+        <div className={styles.spinnerContainer}>
+          <Spinner />
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default ContestsContainer;
