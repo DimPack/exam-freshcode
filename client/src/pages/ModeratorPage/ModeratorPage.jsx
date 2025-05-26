@@ -59,67 +59,61 @@ const ModeratorPage = () => {
           <p className={styles.noOffers}>No offers available</p>
         ) : (
           <ul className={styles.list}>
-            {sortedOffers.map((offer) => {
-              console.log('OFFER:', offer);
-              return (
-                <li key={offer.id} className={styles.item}>
-                  <div className={styles.creativeInfo}>
-                    <p className={styles.creativeName}>
-                      User created an offer {offer.id}
-                    </p>
-                    <p className={styles.titleCreative}>
-                      First name:{' '}
-                      <span className={styles.infoCreative}>
-                        {offer.User.firstName}
-                      </span>
-                    </p>
-                    <p className={styles.titleCreative}>
-                      Last name:{' '}
-                      <span className={styles.infoCreative}>
-                        {offer.User.lastName}
-                      </span>
-                    </p>
-                    <p className={styles.titleCreative}>
-                      Email:{' '}
-                      <span className={styles.infoCreative}>
-                        {offer.User.email}
-                      </span>
-                    </p>
-                  </div>
-                  <div className={textContext}>
-                    <p className={styles.creativeName}>Offer text</p>
-                    <p>{offer.text}</p>
-                  </div>
-                  <div className={styles.creativeInfo}>
-                    <p className={styles.creativeName}>Status</p>
-                    <img
-                      src={statusIcons[offer.status]}
-                      alt={offer.status}
-                      className={styles.statusIcon}
-                    />
-                  </div>
-                  <div className={styles.creativeInfo}>
-                    <p className={styles.creativeName}>Created a contest</p>
-                    <p>{offer.Contest.User.email}</p>
-                  </div>
-                  <div className={styles.buttons}>
-                    <button
-                      onClick={() => handleShowToCustomer(offer.id)}
-                      disabled={offer.status === 'visible'}
-                      className={styles.button}
-                    >
-                      Show to customer
-                    </button>
-                    <button
-                      onClick={() => setOfferToDelete(offer.id)}
-                      className={styles.button}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </li>
-              );
-            })}
+            {sortedOffers.map((offer) => (
+              <li key={offer.id} className={styles.item}>
+                <div className={styles.creativeInfo}>
+                  <p className={styles.titleCreative}>
+                    <strong>Task title:</strong>{' '}
+                    <span className={styles.infoCreative}>
+                      {offer.Contest?.title || 'No title'}
+                    </span>
+                  </p>
+                  <p className={styles.titleCreative}>
+                    <strong>Industry:</strong>{' '}
+                    <span className={styles.infoCreative}>
+                      {offer.Contest?.industry || 'No industry'}
+                    </span>
+                  </p>
+                  <p className={styles.titleCreative}>
+                    <strong>Type:</strong>{' '}
+                    <span className={styles.infoCreative}>
+                      {offer.Contest?.styleName || 'No type'}
+                    </span>
+                  </p>
+                </div>
+                <div className={textContext}>
+                  <p className={styles.creativeName}>Offer text</p>
+                  <p>{offer.text}</p>
+                </div>
+                <div className={styles.creativeInfo}>
+                  <p className={styles.creativeName}>Status</p>
+                  <img
+                    src={statusIcons[offer.status]}
+                    alt={offer.status}
+                    className={styles.statusIcon}
+                  />
+                </div>
+                <div className={styles.creativeInfo}>
+                  <p className={styles.creativeName}>Task created by</p>
+                  <p>{offer.Contest?.User?.email || 'No user'}</p>
+                </div>
+                <div className={styles.buttons}>
+                  <button
+                    onClick={() => handleShowToCustomer(offer.id)}
+                    disabled={offer.status === 'visible'}
+                    className={styles.button}
+                  >
+                    Show to customer
+                  </button>
+                  <button
+                    onClick={() => setOfferToDelete(offer.id)}
+                    className={styles.button}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
           </ul>
         )}
       </div>
@@ -132,16 +126,24 @@ const ModeratorPage = () => {
       {offerToDelete && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
-            <p>Are you sure you want to delete this offer?</p>
+            <button
+              className={styles.closeBtn}
+              onClick={() => setOfferToDelete(null)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h3 className={styles.modalTitle}>Delete offer</h3>
+            <p className={styles.modalText}>Are you sure you want to delete this offer?</p>
             <div className={styles.modalButtons}>
               <button
-                className={styles.button}
+                className={styles.deleteBtn}
                 onClick={() => handleDeleteOffer(offerToDelete)}
               >
                 Yes, delete
               </button>
               <button
-                className={styles.button}
+                className={styles.cancelBtn}
                 onClick={() => setOfferToDelete(null)}
               >
                 Cancel
